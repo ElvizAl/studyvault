@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  tests:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -31,4 +31,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          script: whoami
+          script: |
+            cd live/
+            git pull
+            npm ci
+            npm run build
+            npx prisma migrate deploy
+            pm2 restart studyvault
