@@ -25,8 +25,11 @@ model User {
   banReason     String?
   banExpires    DateTime?
 
-  sessions Session[]
-  accounts Account[]
+  sessions  Session[]
+  accounts  Account[]
+  notebooks Notebook[]
+  notes     Note[]
+
   @@map("users")
 }
 
@@ -78,4 +81,59 @@ model Verification {
   expiresAt  DateTime
 
   @@map("verifications")
+}
+
+model Notebook {
+  id        String    @id @default(uuid())
+  userId    String
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes Note[]
+
+  @@index([userId, deletedAt])
+  @@map("notebooks")
+}
+
+model Note {
+  id         String    @id @default(uuid())
+  userId     String
+  notebookId String?
+  title      String    @default("")
+  content    String    @default("")
+  wordCount  Int       @default(0)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notebook  Notebook?  @relation(fields: [notebookId], references: [id], onDelete: SetNull)
+  aiSummary AISummary?
+
+  @@index([userId, deletedAt])
+  @@index([userId, notebookId, deletedAt])
+  @@index([userId, updatedAt])
+  @@map("notes")
+}
+
+enum SummaryStatus {
+  FRESH
+  STALE
+  GENERATING
+  FAILED
+}
+
+model AISummary {
+  noteId      String        @id @unique
+  content     String
+  generatedAt DateTime
+  basedOnHash String
+  status      SummaryStatus @default(FRESH)
+
+  note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@map("ai_summaries")
 }
