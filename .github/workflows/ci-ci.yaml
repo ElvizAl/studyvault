@@ -19,7 +19,7 @@ jobs:
         run: npm ci
 
       - name: Run Biome Check
-        run: npm run check
+        run: npm biome check
 
       - name: Build app
         run: npm run build
