@@ -6,7 +6,7 @@ helo
 To run this applicationennewnenn:
 
 ```bash
-pnpm install
+pnpm installffdfd
 pnpm dev
 ```
 
