@@ -1,0 +1,13 @@
+name: "CI/CD"
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test-runner
+        run: echo "hello!"
