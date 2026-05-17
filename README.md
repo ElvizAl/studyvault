@@ -3,7 +3,7 @@ helo
 
 # Getting Started
 
-To run this application:
+To run this applicationennewnenn:
 
 ```bash
 pnpm install
