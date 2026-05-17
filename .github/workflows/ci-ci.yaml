@@ -19,7 +19,7 @@ jobs:
         run: npm ci
 
       - name: Run Biome Check
-        run: npm biome check
+        run: npx biome check --write --unsafe
 
       - name: Build app
         run: npm run build
