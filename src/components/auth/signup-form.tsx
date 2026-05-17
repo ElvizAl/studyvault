@@ -44,6 +44,13 @@ export function SignupForm({
 		try {
 			const result = await registerServerFn({ data });
 
+			if (!result) {
+				const message = "Terjadi kesalahan pada server. Silakan coba lagi.";
+				setError("root", { message });
+				toast.error(message);
+				return;
+			}
+
 			if (result.success) {
 				toast.success(result.message);
 				navigate({ to: "/" });
@@ -55,9 +62,14 @@ export function SignupForm({
 			console.error("[Signup Client Error]", error);
 			let message = "Terjadi kesalahan. Silakan coba lagi.";
 
-			// Handle server function validation errors or other structured errors
-			if (error && typeof error === "object" && "message" in error) {
-				message = (error as { message: string }).message || message;
+			// Handle server function errors - check if it's a structured response
+			if (error && typeof error === "object") {
+				if ("result" in error) {
+					const res = (error as { result: { error?: string } }).result;
+					if (res?.error) message = res.error;
+				} else if ("message" in error) {
+					message = (error as { message: string }).message || message;
+				}
 			}
 
 			setError("root", { message });

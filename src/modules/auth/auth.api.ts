@@ -15,6 +15,22 @@ const errorMessages: Record<string, string> = {
 	INVALID_EMAIL_OR_PASSWORD: "Email atau password tidak valid.",
 };
 
+async function parseErrorFromResponse(
+	response: Response,
+): Promise<{ code?: string; message?: string }> {
+	try {
+		const body = await response.json();
+		return {
+			code: typeof body.code === "string" ? body.code : undefined,
+			message: typeof body.message === "string" ? body.message : undefined,
+		};
+	} catch {
+		return {
+			message: response.statusText || "Terjadi kesalahan pada server.",
+		};
+	}
+}
+
 export const registerServerFn = createServerFn({ method: "POST" })
 	.middleware([dbMiddleware])
 	.inputValidator(registerSchema)
@@ -35,12 +51,15 @@ export const registerServerFn = createServerFn({ method: "POST" })
 		} catch (error: unknown) {
 			console.error("[Register Error]", error);
 
-			// Better Auth errors may come as plain Error or Response-like objects
-			// Try to extract error code from various error shapes
 			let errorCode: string | undefined;
 			let errorMessage: string | undefined;
 
-			if (error && typeof error === "object") {
+			// Better Auth can throw a Response object
+			if (error instanceof Response) {
+				const parsed = await parseErrorFromResponse(error);
+				errorCode = parsed.code;
+				errorMessage = parsed.message;
+			} else if (error && typeof error === "object") {
 				// Handle APIError-like objects (has body with code)
 				if ("body" in error && error.body && typeof error.body === "object") {
 					const body = error.body as Record<string, unknown>;
