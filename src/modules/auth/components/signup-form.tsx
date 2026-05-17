@@ -1,5 +1,5 @@
 import { cn } from "@/shared/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/components/ui/button";
 import {
 	Field,
 	FieldDescription,
@@ -7,8 +7,8 @@ import {
 	FieldGroup,
 	FieldLabel,
 	FieldSeparator,
-} from "@/components/ui/field.tsx";
-import { Input } from "@/components/ui/input";
+} from "@/shared/components/ui/field";
+import { Input } from "@/shared/components/ui/input";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { registerServerFn } from "@/modules/auth/auth.api";
 import { useForm } from "react-hook-form";
