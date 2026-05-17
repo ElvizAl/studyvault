@@ -25,10 +25,10 @@ jobs:
         run: npm run build
 
       - name: SSH to server and run script
-          uses: appleboy/ssh-action@v1
-          with:
-            host: ${{ secrets.HOST }}
-            username: ${{ secrets.USERNAME }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            port: ${{ secrets.PORT }}
-            script: whoami
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: whoami
