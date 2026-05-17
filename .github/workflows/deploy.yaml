@@ -32,9 +32,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            export PATH="/home/elvis/.nvm/versions/node/v24.15.0/bin:$PATH"
             cd /home/elvis/live/
-            git pull
-            /home/elvis/.nvm/versions/node/v24.15.0/bin/npm ci
-            /home/elvis/.nvm/versions/node/v24.15.0/bin/npm run build
-            /home/elvis/.nvm/versions/node/v24.15.0/bin/npm run prisma migrate deploy
-            /home/elvis/.nvm/versions/node/v24.15.0/bin/pm2 restart studyvault
+            git fetch origin master
+            git reset --hard origin/master
+            npm ci
+            npm run build
+            npm run prisma migrate deploy
+            pm2 restart studyvault
