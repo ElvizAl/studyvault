@@ -9,5 +9,17 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
-      - name: test-runner
-        run: echo "hello!"
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Run Biome Check
+        run: npm run check
+
+      - name: Build app
+        run: npm run build
