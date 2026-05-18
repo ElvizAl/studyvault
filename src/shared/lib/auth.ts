@@ -13,6 +13,12 @@ export const auth = betterAuth({
 		minPasswordLength: 8,
 		autoSignIn: false,
 	},
+	socialProviders: {
+		google: {
+			clientId: process.env.GOOGLE_CLIENT_ID || "",
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+		},
+	},
 	session: {
 		expiresIn: 30 * 24 * 60 * 60,
 	},

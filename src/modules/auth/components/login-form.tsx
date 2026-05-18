@@ -5,22 +5,19 @@ import {
 	FieldDescription,
 	FieldError,
 	FieldGroup,
-	FieldLabel,
 	FieldSeparator,
+	FieldLabel,
 } from "@/shared/components/ui/field.tsx";
 import { Input } from "@/shared/components/ui/input";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { registerServerFn } from "@/modules/auth/auth.api";
+import { loginServerFn } from "@/modules/auth/auth.api";
 import { useForm } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import {
-	registerSchema,
-	type RegisterFormValues,
-} from "@/modules/auth/auth.schema";
+import { loginSchema, type LoginFormValues } from "@/modules/auth/auth.schema";
 import { toast } from "sonner";
 import { authClient } from "@/shared/lib/auth-client";
 
-export function SignupForm({
+export function LoginForm({
 	className,
 	...props
 }: React.ComponentProps<"form">) {
@@ -31,19 +28,17 @@ export function SignupForm({
 		handleSubmit,
 		setError,
 		formState: { errors, isSubmitting },
-	} = useForm<RegisterFormValues>({
-		resolver: standardSchemaResolver(registerSchema),
+	} = useForm<LoginFormValues>({
+		resolver: standardSchemaResolver(loginSchema),
 		defaultValues: {
-			name: "",
 			email: "",
 			password: "",
-			password_confirmation: "",
 		},
 	});
 
-	async function onSubmit(data: RegisterFormValues) {
+	async function onSubmit(data: LoginFormValues) {
 		try {
-			const result = await registerServerFn({ data });
+			const result = await loginServerFn({ data });
 
 			if (!result) {
 				const message = "Terjadi kesalahan pada server. Silakan coba lagi.";
@@ -54,16 +49,15 @@ export function SignupForm({
 
 			if (result.success) {
 				toast.success(result.message);
-				navigate({ to: "/login" as string });
+				navigate({ to: "/" });
 			} else {
 				setError("root", { message: result.error });
 				toast.error(result.error);
 			}
 		} catch (error: unknown) {
-			console.error("[Signup Client Error]", error);
+			console.error("[Login Client Error]", error);
 			let message = "Terjadi kesalahan. Silakan coba lagi.";
 
-			// Handle server function errors - check if it's a structured response
 			if (error && typeof error === "object") {
 				if ("result" in error) {
 					const res = (error as { result: { error?: string } }).result;
@@ -86,9 +80,9 @@ export function SignupForm({
 		>
 			<FieldGroup>
 				<div className="flex flex-col items-center gap-2 text-center">
-					<h1 className="text-2xl font-bold tracking-tight">Buat Akun Baru</h1>
+					<h1 className="text-2xl font-bold tracking-tight">Selamat Datang</h1>
 					<p className="text-sm text-balance text-muted-foreground leading-relaxed">
-						Mulai simpan dan organisir materi belajarmu dengan bantuan AI
+						Masuk ke akun StudyVault AI kamu
 					</p>
 				</div>
 
@@ -154,18 +148,6 @@ export function SignupForm({
 					</div>
 				)}
 
-				<Field data-invalid={!!errors.name}>
-					<FieldLabel htmlFor="name">Nama Lengkap</FieldLabel>
-					<Input
-						id="name"
-						type="text"
-						placeholder="John Doe"
-						disabled={isSubmitting}
-						{...register("name")}
-					/>
-					<FieldError>{errors.name?.message}</FieldError>
-				</Field>
-
 				<Field data-invalid={!!errors.email}>
 					<FieldLabel htmlFor="email">Email</FieldLabel>
 					<Input
@@ -178,9 +160,7 @@ export function SignupForm({
 					{errors.email ? (
 						<FieldError>{errors.email.message}</FieldError>
 					) : (
-						<FieldDescription>
-							Email ini akan digunakan untuk login dan notifikasi.
-						</FieldDescription>
+						<FieldDescription>Masukkan email yang terdaftar.</FieldDescription>
 					)}
 				</Field>
 
@@ -192,27 +172,8 @@ export function SignupForm({
 						disabled={isSubmitting}
 						{...register("password")}
 					/>
-					{errors.password ? (
+					{errors.password && (
 						<FieldError>{errors.password.message}</FieldError>
-					) : (
-						<FieldDescription>Minimal 8 karakter.</FieldDescription>
-					)}
-				</Field>
-
-				<Field data-invalid={!!errors.password_confirmation}>
-					<FieldLabel htmlFor="password_confirmation">
-						Konfirmasi Password
-					</FieldLabel>
-					<Input
-						id="password_confirmation"
-						type="password"
-						disabled={isSubmitting}
-						{...register("password_confirmation")}
-					/>
-					{errors.password_confirmation ? (
-						<FieldError>{errors.password_confirmation.message}</FieldError>
-					) : (
-						<FieldDescription>Masukkan password yang sama.</FieldDescription>
 					)}
 				</Field>
 
@@ -240,7 +201,7 @@ export function SignupForm({
 										d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
 									/>
 								</svg>
-								Membuat akun...
+								Masuk...
 							</>
 						) : (
 							<>
@@ -260,13 +221,13 @@ export function SignupForm({
 									<polyline points="10 17 15 12 10 7" />
 									<line x1="15" x2="3" y1="12" y2="12" />
 								</svg>
-								Buat Akun
+								Masuk
 							</>
 						)}
 					</Button>
 				</Field>
 
-				<FieldSeparator>Atau daftar dengan</FieldSeparator>
+				<FieldSeparator>Atau masuk dengan</FieldSeparator>
 
 				<Field>
 					<Button
@@ -303,17 +264,17 @@ export function SignupForm({
 								fill="#EA4335"
 							/>
 						</svg>
-						Daftar dengan Google
+						Masuk dengan Google
 					</Button>
 				</Field>
 
 				<div className="text-center text-sm text-muted-foreground">
-					Sudah punya akun?{" "}
+					Belum punya akun?{" "}
 					<Link
-						to="/"
+						to="/register"
 						className="font-medium text-[#328f97] hover:text-[#246f76] underline underline-offset-4 decoration-[#328f97]/40"
 					>
-						Masuk di sini
+						Daftar di sini
 					</Link>
 				</div>
 			</FieldGroup>

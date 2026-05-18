@@ -15,7 +15,7 @@ export const Route = createRootRoute({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "StudyVault AI",
+				title: "TanStack Start Starter",
 			},
 		],
 		links: [
@@ -26,13 +26,6 @@ export const Route = createRootRoute({
 		],
 	}),
 	shellComponent: RootDocument,
-	notFoundComponent: () => {
-		return (
-			<div className="min-h-screen flex items-center justify-center">
-				<p>404 Not Found</p>
-			</div>
-		);
-	},
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
