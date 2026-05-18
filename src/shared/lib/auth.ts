@@ -7,7 +7,10 @@ export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
 		provider: "postgresql",
 	}),
-	trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:3000"],
+	trustedOrigins: [
+		process.env.BETTER_AUTH_URL || "http://localhost:3000",
+		"https://studentvault.my.id",
+	],
 	emailAndPassword: {
 		enabled: true,
 		minPasswordLength: 8,
