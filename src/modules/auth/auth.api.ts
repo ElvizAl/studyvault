@@ -1,5 +1,6 @@
 import { dbMiddleware } from "@/shared/middleware/db.middleware";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 import { registerSchema, loginSchema } from "@/modules/auth/auth.schema";
 import { auth, type ErrorCode } from "@/shared/lib/auth";
 
@@ -156,3 +157,12 @@ export const loginServerFn = createServerFn({ method: "POST" })
 			};
 		}
 	});
+
+export const requireSessionFn = createServerFn({ method: "GET" }).handler(
+	async () => {
+		const session = await auth.api.getSession({
+			headers: getRequestHeaders(),
+		});
+		return session;
+	},
+);

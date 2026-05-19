@@ -277,7 +277,7 @@ export function SignupForm({
 						onClick={async () => {
 							await authClient.signIn.social({
 								provider: "google",
-								callbackURL: "/app",
+								callbackURL: "/",
 							});
 						}}
 					>
