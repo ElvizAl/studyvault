@@ -15,6 +15,7 @@ import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as AppTrashRouteImport } from './routes/_app/trash'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
+import { Route as AppNewRouteImport } from './routes/_app/new'
 import { Route as AppNoteIdRouteImport } from './routes/_app/$noteId'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -47,6 +48,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppNewRoute = AppNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppNoteIdRoute = AppNoteIdRouteImport.update({
   id: '/$noteId',
   path: '/$noteId',
@@ -61,6 +67,7 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/$noteId': typeof AppNoteIdRoute
+  '/new': typeof AppNewRoute
   '/settings': typeof AppSettingsRoute
   '/trash': typeof AppTrashRoute
   '/login': typeof AuthLoginRoute
@@ -69,6 +76,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/$noteId': typeof AppNoteIdRoute
+  '/new': typeof AppNewRoute
   '/settings': typeof AppSettingsRoute
   '/trash': typeof AppTrashRoute
   '/login': typeof AuthLoginRoute
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/_app/$noteId': typeof AppNoteIdRoute
+  '/_app/new': typeof AppNewRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/trash': typeof AppTrashRoute
   '/_auth/login': typeof AuthLoginRoute
@@ -92,6 +101,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$noteId'
+    | '/new'
     | '/settings'
     | '/trash'
     | '/login'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/$noteId'
+    | '/new'
     | '/settings'
     | '/trash'
     | '/login'
@@ -110,6 +121,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/_app/$noteId'
+    | '/_app/new'
     | '/_app/settings'
     | '/_app/trash'
     | '/_auth/login'
@@ -169,6 +181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/_app/new': {
+      id: '/_app/new'
+      path: '/new'
+      fullPath: '/new'
+      preLoaderRoute: typeof AppNewRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/_app/$noteId': {
       id: '/_app/$noteId'
       path: '/$noteId'
@@ -188,6 +207,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteRouteChildren {
   AppNoteIdRoute: typeof AppNoteIdRoute
+  AppNewRoute: typeof AppNewRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppTrashRoute: typeof AppTrashRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -195,6 +215,7 @@ interface AppRouteRouteChildren {
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppNoteIdRoute: AppNoteIdRoute,
+  AppNewRoute: AppNewRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppTrashRoute: AppTrashRoute,
   AppIndexRoute: AppIndexRoute,
