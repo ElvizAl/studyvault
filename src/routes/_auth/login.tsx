@@ -1,13 +1,21 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { LoginForm } from "#/modules/auth/components/login-form";
+import { requireSessionFn } from "@/modules/auth/auth.api";
 
 export const Route = createFileRoute("/_auth/login")({
+	beforeLoad: async () => {
+		const session = await requireSessionFn();
+		if (session) {
+			throw redirect({
+				to: "/",
+			});
+		}
+	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-
 	return (
 		<div className="grid min-h-svh lg:grid-cols-2">
 			{/* Left Panel - Branding & Hero */}
