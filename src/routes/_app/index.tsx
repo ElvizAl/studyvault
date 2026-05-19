@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/_app/')({
-  component: RouteComponent,
-})
+export const Route = createFileRoute("/_app/")({
+	component: RouteComponent,
+});
 
 function RouteComponent() {
-  return <div>Last opened note</div>
+	return <div>Last opened note</div>;
 }
