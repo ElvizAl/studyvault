@@ -7,6 +7,7 @@ export const Route = createFileRoute("/_auth/login")({
 });
 
 function RouteComponent() {
+
 	return (
 		<div className="grid min-h-svh lg:grid-cols-2">
 			{/* Left Panel - Branding & Hero */}
