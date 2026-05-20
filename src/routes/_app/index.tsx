@@ -29,7 +29,9 @@ function RouteComponent() {
 					Welcome to StudyVault AI
 				</h1>
 				<p className="text-white/60 text-sm leading-relaxed">
-					Your personal digital notebook powered by smart AI capabilities. Jot down notes, organize them into notebooks, and let the AI summarize your learning.
+					Your personal digital notebook powered by smart AI capabilities. Jot
+					down notes, organize them into notebooks, and let the AI summarize
+					your learning.
 				</p>
 			</div>
 

@@ -29,4 +29,6 @@ export type CreateNoteInput = z.infer<typeof createNoteSchema>;
 export type UpdateNoteInput = z.infer<typeof updateNoteSchema>;
 export type DeleteNoteInput = z.infer<typeof deleteNoteSchema>;
 export type RestoreNoteInput = z.infer<typeof restoreNoteSchema>;
-export type PermanentDeleteNoteInput = z.infer<typeof permanentDeleteNoteSchema>;
+export type PermanentDeleteNoteInput = z.infer<
+	typeof permanentDeleteNoteSchema
+>;
