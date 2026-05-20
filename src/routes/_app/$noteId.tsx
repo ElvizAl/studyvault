@@ -1,7 +1,22 @@
-import { createFileRoute, redirect, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	redirect,
+	useNavigate,
+	useRouter,
+} from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
-import { getNoteByIdFn, updateNoteFn, deleteNoteFn } from "@/modules/note/note.api";
-import { FileText, Trash2, CheckCircle2, CloudLightning, Sparkles } from "lucide-react";
+import {
+	getNoteByIdFn,
+	updateNoteFn,
+	deleteNoteFn,
+} from "@/modules/note/note.api";
+import {
+	FileText,
+	Trash2,
+	CheckCircle2,
+	CloudLightning,
+	Sparkles,
+} from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 
 export const Route = createFileRoute("/_app/$noteId")({
@@ -22,7 +37,9 @@ function RouteComponent() {
 
 	const [title, setTitle] = useState(note.title);
 	const [content, setContent] = useState(note.content);
-	const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "error">("saved");
+	const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "error">(
+		"saved",
+	);
 	const saveTimeout = useRef<NodeJS.Timeout | null>(null);
 
 	// Sync local state with loaded note if noteId changes
@@ -30,7 +47,7 @@ function RouteComponent() {
 		setTitle(note.title);
 		setContent(note.content);
 		setSaveStatus("saved");
-	}, [note.id, note.title, note.content]);
+	}, [note.title, note.content]);
 
 	// Auto-save function
 	const performSave = async (updatedTitle: string, updatedContent: string) => {
@@ -95,7 +112,9 @@ function RouteComponent() {
 				<header className="h-14 border-b border-white/5 px-6 flex items-center justify-between bg-white/[0.01]">
 					<div className="flex items-center gap-2 text-white/40 text-sm font-medium">
 						<FileText className="w-4 h-4 text-[#4fb8b2]" />
-						<span className="truncate max-w-[200px]">{title || "Untitled"}</span>
+						<span className="truncate max-w-[200px]">
+							{title || "Untitled"}
+						</span>
 					</div>
 
 					<div className="flex items-center gap-4">
@@ -171,7 +190,10 @@ function RouteComponent() {
 					</div>
 
 					<p className="text-white/60 text-sm leading-relaxed font-sans">
-						Start typing in the editor. As your note grows, Nozen's AI model will automatically analyze and generate high-yield summaries, flashcards, and conceptual breakdowns to boost your learning retention.
+						Start typing in the editor. As your note grows, Nozen's AI model
+						will automatically analyze and generate high-yield summaries,
+						flashcards, and conceptual breakdowns to boost your learning
+						retention.
 					</p>
 				</div>
 			</aside>

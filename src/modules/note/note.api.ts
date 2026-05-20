@@ -65,8 +65,12 @@ export const updateNoteFn = createServerFn({ method: "POST" })
 			data: {
 				title: data.title ?? existing.title,
 				content: data.content ?? existing.content,
-				wordCount: data.content !== undefined ? getWordCount(data.content) : existing.wordCount,
-				notebookId: data.notebookId !== undefined ? data.notebookId : existing.notebookId,
+				wordCount:
+					data.content !== undefined
+						? getWordCount(data.content)
+						: existing.wordCount,
+				notebookId:
+					data.notebookId !== undefined ? data.notebookId : existing.notebookId,
 			},
 		});
 

@@ -1,4 +1,8 @@
-import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	useNavigate,
+	useRouter,
+} from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
 import { createNoteFn } from "@/modules/note/note.api";
 import { FileText } from "lucide-react";

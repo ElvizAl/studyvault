@@ -1,4 +1,11 @@
-import { createFileRoute, Outlet, redirect, Link, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	Outlet,
+	redirect,
+	Link,
+	useNavigate,
+	useRouter,
+} from "@tanstack/react-router";
 import { requireSessionFn } from "@/modules/auth/auth.api";
 import { getNotesFn } from "@/modules/note/note.api";
 import { Plus, Trash2, Settings, FileText, LogOut } from "lucide-react";
@@ -46,7 +53,10 @@ function RouteComponent() {
 			<aside className="w-[280px] flex flex-col border-r border-white/5 bg-white/[0.02] backdrop-blur-md">
 				{/* Header / Brand */}
 				<div className="p-5 border-b border-white/5 flex items-center justify-between">
-					<Link to="/" className="flex items-center gap-2.5 font-bold text-lg tracking-tight">
+					<Link
+						to="/"
+						className="flex items-center gap-2.5 font-bold text-lg tracking-tight"
+					>
 						<div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-[#4fb8b2]/20 to-[#2f6a4a]/20 border border-[#4fb8b2]/30">
 							<FileText className="w-4 h-4 text-[#4fb8b2]" />
 						</div>
@@ -84,12 +94,20 @@ function RouteComponent() {
 										key={note.id}
 										to="/$noteId"
 										params={{ noteId: note.id }}
-										activeProps={{ className: "bg-white/10 text-white border-l-2 border-[#4fb8b2]" }}
-										inactiveProps={{ className: "text-white/60 hover:bg-white/[0.04] hover:text-white" }}
+										activeProps={{
+											className:
+												"bg-white/10 text-white border-l-2 border-[#4fb8b2]",
+										}}
+										inactiveProps={{
+											className:
+												"text-white/60 hover:bg-white/[0.04] hover:text-white",
+										}}
 										className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group border-l-2 border-transparent"
 									>
 										<FileText className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
-										<span className="truncate flex-1">{note.title || "Untitled"}</span>
+										<span className="truncate flex-1">
+											{note.title || "Untitled"}
+										</span>
 									</Link>
 								))}
 							</nav>
@@ -118,6 +136,7 @@ function RouteComponent() {
 						<span>Settings</span>
 					</Link>
 					<button
+						type="button"
 						onClick={handleSignOut}
 						className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-rose-400 hover:bg-rose-500/10 transition-all duration-150 text-left"
 					>

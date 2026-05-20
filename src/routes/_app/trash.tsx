@@ -1,5 +1,9 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { getTrashNotesFn, restoreNoteFn, permanentDeleteNoteFn } from "@/modules/note/note.api";
+import {
+	getTrashNotesFn,
+	restoreNoteFn,
+	permanentDeleteNoteFn,
+} from "@/modules/note/note.api";
 import { Trash2, RotateCcw, Info, FileText } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 
@@ -25,7 +29,11 @@ function RouteComponent() {
 	};
 
 	const handlePermanentDelete = async (id: string) => {
-		if (window.confirm("Are you absolutely sure you want to permanently delete this note? This action is irreversible.")) {
+		if (
+			window.confirm(
+				"Are you absolutely sure you want to permanently delete this note? This action is irreversible.",
+			)
+		) {
 			try {
 				await permanentDeleteNoteFn({ data: { id } });
 				await router.invalidate();
@@ -50,7 +58,9 @@ function RouteComponent() {
 				<div className="flex items-start gap-3 bg-rose-500/10 border border-rose-500/20 p-4 rounded-2xl text-rose-200/90 text-sm">
 					<Info className="w-5 h-5 flex-shrink-0 mt-0.5" />
 					<p className="leading-relaxed">
-						Notes in the trash have been soft-deleted. You can restore them to recover your work, or permanently delete them. Permanent deletion will remove all contents and associated AI summaries forever.
+						Notes in the trash have been soft-deleted. You can restore them to
+						recover your work, or permanently delete them. Permanent deletion
+						will remove all contents and associated AI summaries forever.
 					</p>
 				</div>
 
@@ -61,7 +71,9 @@ function RouteComponent() {
 						</div>
 						<div>
 							<h3 className="font-bold text-lg text-white">Trash is Empty</h3>
-							<p className="text-white/40 text-sm">No soft-deleted notes found.</p>
+							<p className="text-white/40 text-sm">
+								No soft-deleted notes found.
+							</p>
 						</div>
 					</div>
 				) : (
@@ -77,9 +89,18 @@ function RouteComponent() {
 										<FileText className="w-5 h-5 text-white/40" />
 									</div>
 									<div className="min-w-0">
-										<h4 className="font-semibold text-white truncate">{note.title || "Untitled Note"}</h4>
+										<h4 className="font-semibold text-white truncate">
+											{note.title || "Untitled Note"}
+										</h4>
 										<p className="text-xs text-white/30 truncate">
-											Deleted at {new Date(note.deletedAt!).toLocaleDateString()} at {new Date(note.deletedAt!).toLocaleTimeString()}
+											Deleted at{" "}
+											{note.deletedAt
+												? new Date(note.deletedAt).toLocaleDateString()
+												: "-"}{" "}
+											at{" "}
+											{note.deletedAt
+												? new Date(note.deletedAt).toLocaleTimeString()
+												: "-"}
 										</p>
 									</div>
 								</div>
