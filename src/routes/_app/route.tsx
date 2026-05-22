@@ -48,47 +48,47 @@ function RouteComponent() {
 	};
 
 	return (
-		<div className="flex h-screen w-screen overflow-hidden bg-gradient-to-br from-[#0c1418] via-[#0f1d22] to-[#0a1418] text-white">
-			{/* Left Sidebar - 280px */}
-			<aside className="w-[280px] flex flex-col border-r border-white/5 bg-white/[0.02] backdrop-blur-md">
-				{/* Header / Brand */}
-				<div className="p-5 border-b border-white/5 flex items-center justify-between">
+		<div className="flex h-screen w-screen overflow-hidden bg-background text-foreground">
+			{/* Left Sidebar - Notion/Linear style */}
+			<aside className="w-[260px] flex flex-col border-r border-border bg-zinc-50 dark:bg-zinc-950 shrink-0">
+				{/* Sidebar Header */}
+				<div className="h-14 px-4 border-b border-border flex items-center justify-between">
 					<Link
 						to="/"
-						className="flex items-center gap-2.5 font-bold text-lg tracking-tight"
+						className="flex items-center gap-2 font-semibold text-sm tracking-tight text-foreground group"
 					>
-						<div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-[#4fb8b2]/20 to-[#2f6a4a]/20 border border-[#4fb8b2]/30">
-							<FileText className="w-4 h-4 text-[#4fb8b2]" />
+						<div className="flex items-center justify-center w-7 h-7 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+							<FileText className="w-3.5 h-3.5" />
 						</div>
-						<span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-[#d7ece8] to-[#60d7cf]">
+						<span className="font-semibold text-zinc-900 dark:text-zinc-100">
 							StudyVault AI
 						</span>
 					</Link>
 				</div>
 
-				{/* Create Button */}
-				<div className="p-4">
+				{/* Create Button Container */}
+				<div className="p-3">
 					<Button
 						onClick={handleCreateDraft}
-						className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#4fb8b2] to-[#2f6a4a] hover:from-[#60d7cf] hover:to-[#6ec89a] text-white font-semibold shadow-lg shadow-[#4fb8b2]/10 border border-white/10 rounded-xl transition-all duration-200"
+						className="w-full h-8.5 flex items-center justify-center gap-2 text-xs font-medium rounded-lg bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all border border-transparent shadow-xs cursor-pointer"
 					>
-						<Plus className="w-4 h-4" />
+						<Plus className="w-3.5 h-3.5" />
 						New Note
 					</Button>
 				</div>
 
-				{/* Navigation Lists */}
-				<div className="flex-1 overflow-y-auto px-3 py-2 space-y-6">
+				{/* Notes List Container */}
+				<div className="flex-1 overflow-y-auto px-2 py-2 space-y-6">
 					<div>
-						<div className="px-3 mb-2 text-xs font-semibold tracking-wider text-white/30 uppercase">
+						<div className="px-3 mb-2 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
 							Notes
 						</div>
 						{notes.length === 0 ? (
-							<div className="px-3 py-4 text-sm text-white/40 italic">
-								No notes yet. Create one!
+							<div className="px-3 py-3 text-xs text-muted-foreground/75 italic">
+								No notes yet
 							</div>
 						) : (
-							<nav className="space-y-1">
+							<nav className="space-y-0.5">
 								{notes.map((note) => (
 									<Link
 										key={note.id}
@@ -96,15 +96,15 @@ function RouteComponent() {
 										params={{ noteId: note.id }}
 										activeProps={{
 											className:
-												"bg-white/10 text-white border-l-2 border-[#4fb8b2]",
+												"bg-zinc-200/60 dark:bg-zinc-800/60 text-foreground font-semibold border-l-2 border-primary",
 										}}
 										inactiveProps={{
 											className:
-												"text-white/60 hover:bg-white/[0.04] hover:text-white",
+												"text-muted-foreground hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:text-foreground",
 										}}
-										className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group border-l-2 border-transparent"
+										className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-100 group border-l-2 border-transparent"
 									>
-										<FileText className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
+										<FileText className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
 										<span className="truncate flex-1">
 											{note.title || "Untitled"}
 										</span>
@@ -115,39 +115,51 @@ function RouteComponent() {
 					</div>
 				</div>
 
-				{/* Footer Links (Settings, Trash) */}
-				<div className="p-3 border-t border-white/5 bg-white/[0.01] space-y-1">
+				{/* Footer Options (Settings, Trash, Logout) */}
+				<div className="p-2.5 border-t border-border bg-zinc-100/40 dark:bg-zinc-900/10 space-y-0.5">
 					<Link
 						to="/trash"
-						activeProps={{ className: "bg-white/10 text-white" }}
-						inactiveProps={{ className: "text-white/60 hover:bg-white/[0.04]" }}
-						className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-150"
+						activeProps={{
+							className:
+								"bg-zinc-200/60 dark:bg-zinc-800/60 text-foreground font-semibold",
+						}}
+						inactiveProps={{
+							className:
+								"text-muted-foreground hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:text-foreground",
+						}}
+						className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-100"
 					>
-						<Trash2 className="w-4 h-4" />
+						<Trash2 className="w-3.5 h-3.5" />
 						<span>Trash</span>
 					</Link>
 					<Link
 						to="/settings"
-						activeProps={{ className: "bg-white/10 text-white" }}
-						inactiveProps={{ className: "text-white/60 hover:bg-white/[0.04]" }}
-						className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-150"
+						activeProps={{
+							className:
+								"bg-zinc-200/60 dark:bg-zinc-800/60 text-foreground font-semibold",
+						}}
+						inactiveProps={{
+							className:
+								"text-muted-foreground hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:text-foreground",
+						}}
+						className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-100"
 					>
-						<Settings className="w-4 h-4" />
+						<Settings className="w-3.5 h-3.5" />
 						<span>Settings</span>
 					</Link>
 					<button
 						type="button"
 						onClick={handleSignOut}
-						className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-rose-400 hover:bg-rose-500/10 transition-all duration-150 text-left"
+						className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-rose-500 hover:bg-rose-500/10 transition-all duration-100 text-left cursor-pointer"
 					>
-						<LogOut className="w-4 h-4" />
+						<LogOut className="w-3.5 h-3.5" />
 						<span>Sign Out</span>
 					</button>
 				</div>
 			</aside>
 
-			{/* Main Content Area */}
-			<main className="flex-1 flex flex-col overflow-hidden bg-gradient-to-br from-[#0c1418] to-[#0f1d22]">
+			{/* Main Content Pane */}
+			<main className="flex-1 flex flex-col overflow-hidden bg-background">
 				<Outlet />
 			</main>
 		</div>

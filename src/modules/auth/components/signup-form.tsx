@@ -19,6 +19,7 @@ import {
 } from "@/modules/auth/auth.schema";
 import { toast } from "sonner";
 import { authClient } from "@/shared/lib/auth-client";
+import { FileText, LayoutGrid, Sparkles } from "lucide-react";
 
 export function SignupForm({
 	className,
@@ -80,148 +81,113 @@ export function SignupForm({
 
 	return (
 		<form
-			className={cn("flex flex-col gap-6", className)}
+			className={cn("flex flex-col gap-5", className)}
 			onSubmit={handleSubmit(onSubmit)}
 			{...props}
 		>
-			<FieldGroup>
-				<div className="flex flex-col items-center gap-2 text-center">
-					<h1 className="text-2xl font-bold tracking-tight">Buat Akun Baru</h1>
-					<p className="text-sm text-balance text-muted-foreground leading-relaxed">
-						Mulai simpan dan organisir materi belajarmu dengan bantuan AI
+			<FieldGroup className="gap-4">
+				<div className="flex flex-col items-center gap-1 text-center">
+					<h1 className="text-xl font-semibold tracking-tight text-foreground">Create an Account</h1>
+					<p className="text-xs text-muted-foreground leading-relaxed">
+						Join StudyVault AI and organize your learning
 					</p>
 				</div>
 
-				{/* Mobile-only feature badges */}
-				<div className="flex flex-wrap justify-center gap-2 lg:hidden">
-					<span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#4fb8b2]/10 text-[#328f97] border border-[#4fb8b2]/15">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="12"
-							height="12"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-							<path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-						</svg>
-						Smart Notes
+				{/* Mobile-only feature badges - clean gray theme */}
+				<div className="flex flex-wrap justify-center gap-1.5 lg:hidden">
+					<span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-border">
+						<FileText className="w-3 h-3" />
+						Notes
 					</span>
-					<span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#4fb8b2]/10 text-[#328f97] border border-[#4fb8b2]/15">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="12"
-							height="12"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-							<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-						</svg>
+					<span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-border">
+						<LayoutGrid className="w-3 h-3" />
 						Notebooks
 					</span>
-					<span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium bg-[#4fb8b2]/10 text-[#328f97] border border-[#4fb8b2]/15">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="12"
-							height="12"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z" />
-							<path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />
-						</svg>
-						AI Review
+					<span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 border border-border">
+						<Sparkles className="w-3 h-3" />
+						AI Summary
 					</span>
 				</div>
 
 				{/* General server error */}
 				{errors.root && (
-					<div className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+					<div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2.5 text-xs text-destructive">
 						{errors.root.message}
 					</div>
 				)}
 
-				<Field data-invalid={!!errors.name}>
-					<FieldLabel htmlFor="name">Nama Lengkap</FieldLabel>
+				<Field data-invalid={!!errors.name} className="gap-1">
+					<FieldLabel htmlFor="name" className="text-xs">Full Name</FieldLabel>
 					<Input
 						id="name"
 						type="text"
 						placeholder="John Doe"
 						disabled={isSubmitting}
 						{...register("name")}
+						className="h-8 text-xs rounded-lg"
 					/>
-					<FieldError>{errors.name?.message}</FieldError>
+					<FieldError className="text-[11px]">{errors.name?.message}</FieldError>
 				</Field>
 
-				<Field data-invalid={!!errors.email}>
-					<FieldLabel htmlFor="email">Email</FieldLabel>
+				<Field data-invalid={!!errors.email} className="gap-1">
+					<FieldLabel htmlFor="email" className="text-xs">Email</FieldLabel>
 					<Input
 						id="email"
 						type="email"
-						placeholder="kamu@email.com"
+						placeholder="you@example.com"
 						disabled={isSubmitting}
 						{...register("email")}
+						className="h-8 text-xs rounded-lg"
 					/>
 					{errors.email ? (
-						<FieldError>{errors.email.message}</FieldError>
+						<FieldError className="text-[11px]">{errors.email.message}</FieldError>
 					) : (
-						<FieldDescription>
-							Email ini akan digunakan untuk login dan notifikasi.
-						</FieldDescription>
+						<FieldDescription className="text-[10px] text-muted-foreground">Used for login and sync.</FieldDescription>
 					)}
 				</Field>
 
-				<Field data-invalid={!!errors.password}>
-					<FieldLabel htmlFor="password">Password</FieldLabel>
+				<Field data-invalid={!!errors.password} className="gap-1">
+					<FieldLabel htmlFor="password" className="text-xs">Password</FieldLabel>
 					<Input
 						id="password"
 						type="password"
+						placeholder="••••••••"
 						disabled={isSubmitting}
 						{...register("password")}
+						className="h-8 text-xs rounded-lg"
 					/>
 					{errors.password ? (
-						<FieldError>{errors.password.message}</FieldError>
+						<FieldError className="text-[11px]">{errors.password.message}</FieldError>
 					) : (
-						<FieldDescription>Minimal 8 karakter.</FieldDescription>
+						<FieldDescription className="text-[10px] text-muted-foreground">At least 8 characters.</FieldDescription>
 					)}
 				</Field>
 
-				<Field data-invalid={!!errors.password_confirmation}>
-					<FieldLabel htmlFor="password_confirmation">
-						Konfirmasi Password
+				<Field data-invalid={!!errors.password_confirmation} className="gap-1">
+					<FieldLabel htmlFor="password_confirmation" className="text-xs">
+						Confirm Password
 					</FieldLabel>
 					<Input
 						id="password_confirmation"
 						type="password"
+						placeholder="••••••••"
 						disabled={isSubmitting}
 						{...register("password_confirmation")}
+						className="h-8 text-xs rounded-lg"
 					/>
 					{errors.password_confirmation ? (
-						<FieldError>{errors.password_confirmation.message}</FieldError>
+						<FieldError className="text-[11px]">{errors.password_confirmation.message}</FieldError>
 					) : (
-						<FieldDescription>Masukkan password yang sama.</FieldDescription>
+						<FieldDescription className="text-[10px] text-muted-foreground">Confirm your password.</FieldDescription>
 					)}
 				</Field>
 
-				<Field>
-					<Button type="submit" className="w-full" disabled={isSubmitting}>
+				<Field className="mt-2">
+					<Button type="submit" className="w-full h-8 text-xs rounded-lg font-medium bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200" disabled={isSubmitting}>
 						{isSubmitting ? (
 							<>
 								<svg
-									className="mr-2 h-4 w-4 animate-spin"
+									className="mr-1.5 h-3.5 w-3.5 animate-spin text-current"
 									xmlns="http://www.w3.org/2000/svg"
 									fill="none"
 									viewBox="0 0 24 24"
@@ -240,39 +206,21 @@ export function SignupForm({
 										d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
 									/>
 								</svg>
-								Membuat akun...
+								Creating account...
 							</>
 						) : (
-							<>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="16"
-									height="16"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="currentColor"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									className="mr-1.5"
-								>
-									<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-									<polyline points="10 17 15 12 10 7" />
-									<line x1="15" x2="3" y1="12" y2="12" />
-								</svg>
-								Buat Akun
-							</>
+							<span>Create Account</span>
 						)}
 					</Button>
 				</Field>
 
-				<FieldSeparator>Atau daftar dengan</FieldSeparator>
+				<FieldSeparator className="text-[10px] text-muted-foreground my-1">Or register with</FieldSeparator>
 
 				<Field>
 					<Button
 						variant="outline"
 						type="button"
-						className="w-full"
+						className="w-full h-8 text-xs rounded-lg font-medium border border-border bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-900 text-foreground"
 						disabled={isSubmitting}
 						onClick={async () => {
 							await authClient.signIn.social({
@@ -284,7 +232,7 @@ export function SignupForm({
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
-							className="w-4 h-4"
+							className="w-3.5 h-3.5 mr-1"
 						>
 							<path
 								d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
@@ -303,17 +251,17 @@ export function SignupForm({
 								fill="#EA4335"
 							/>
 						</svg>
-						Daftar dengan Google
+						Google
 					</Button>
 				</Field>
 
-				<div className="text-center text-sm text-muted-foreground">
-					Sudah punya akun?{" "}
+				<div className="text-center text-xs text-muted-foreground mt-1">
+					Already have an account?{" "}
 					<Link
 						to="/"
-						className="font-medium text-[#328f97] hover:text-[#246f76] underline underline-offset-4 decoration-[#328f97]/40"
+						className="font-medium text-foreground hover:underline"
 					>
-						Masuk di sini
+						Log in here
 					</Link>
 				</div>
 			</FieldGroup>

@@ -44,55 +44,55 @@ function RouteComponent() {
 	};
 
 	return (
-		<div className="flex-1 flex flex-col h-full bg-[#0c1418]/60 backdrop-blur-sm overflow-hidden">
+		<div className="flex-1 flex flex-col h-full bg-background overflow-hidden">
 			{/* Top Bar */}
-			<header className="h-14 border-b border-white/5 px-6 flex items-center bg-white/[0.01]">
-				<div className="flex items-center gap-2 text-white/40 text-sm font-medium">
-					<Trash2 className="w-4 h-4 text-rose-400" />
+			<header className="h-14 border-b border-border px-6 flex items-center bg-card">
+				<div className="flex items-center gap-2 text-muted-foreground text-xs font-semibold">
+					<Trash2 className="w-3.5 h-3.5 text-rose-500" />
 					<span>Trash / Deleted Notes</span>
 				</div>
 			</header>
 
 			{/* Content Body */}
-			<div className="flex-1 overflow-y-auto p-6 lg:p-10 max-w-4xl w-full mx-auto space-y-6">
-				<div className="flex items-start gap-3 bg-rose-500/10 border border-rose-500/20 p-4 rounded-2xl text-rose-200/90 text-sm">
-					<Info className="w-5 h-5 flex-shrink-0 mt-0.5" />
+			<div className="flex-1 overflow-y-auto p-6 lg:p-10 max-w-2xl w-full mx-auto space-y-6">
+				<div className="flex items-start gap-3 bg-amber-500/5 dark:bg-amber-500/10 border border-amber-500/20 p-4 rounded-xl text-amber-800 dark:text-amber-200 text-xs">
+					<Info className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
 					<p className="leading-relaxed">
 						Notes in the trash have been soft-deleted. You can restore them to
 						recover your work, or permanently delete them. Permanent deletion
-						will remove all contents and associated AI summaries forever.
+						is irreversible and will remove all contents and associated AI summaries forever.
 					</p>
 				</div>
 
 				{trashNotes.length === 0 ? (
-					<div className="flex flex-col items-center justify-center py-16 text-center space-y-4">
-						<div className="w-16 h-16 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center justify-center shadow-inner">
-							<Trash2 className="w-8 h-8 text-white/20" />
+					<div className="flex flex-col items-center justify-center py-16 text-center space-y-3">
+						<div className="w-12 h-12 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-border flex items-center justify-center shadow-xs">
+							<Trash2 className="w-5 h-5 text-muted-foreground/30" />
 						</div>
-						<div>
-							<h3 className="font-bold text-lg text-white">Trash is Empty</h3>
-							<p className="text-white/40 text-sm">
+						<div className="space-y-1">
+							<h3 className="font-semibold text-sm text-foreground">Trash is Empty</h3>
+							<p className="text-muted-foreground text-xs">
 								No soft-deleted notes found.
 							</p>
 						</div>
 					</div>
 				) : (
-					<div className="grid gap-4">
+					<div className="grid gap-3">
 						{trashNotes.map((note) => (
 							<div
 								key={note.id}
-								className="flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-200 shadow-md group"
+								className="flex items-center justify-between p-3.5 rounded-xl border border-border bg-card hover:bg-zinc-50/50 dark:hover:bg-zinc-900/50 transition-all duration-150 shadow-xs group"
 							>
 								{/* Info */}
-								<div className="flex items-center gap-4 min-w-0">
-									<div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-center flex-shrink-0">
-										<FileText className="w-5 h-5 text-white/40" />
+								<div className="flex items-center gap-3.5 min-w-0">
+									<div className="w-9 h-9 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-border flex items-center justify-center flex-shrink-0">
+										<FileText className="w-4 h-4 text-muted-foreground/60" />
 									</div>
 									<div className="min-w-0">
-										<h4 className="font-semibold text-white truncate">
+										<h4 className="font-semibold text-xs text-foreground truncate">
 											{note.title || "Untitled Note"}
 										</h4>
-										<p className="text-xs text-white/30 truncate">
+										<p className="text-[10px] text-muted-foreground mt-0.5 truncate">
 											Deleted at{" "}
 											{note.deletedAt
 												? new Date(note.deletedAt).toLocaleDateString()
@@ -106,24 +106,24 @@ function RouteComponent() {
 								</div>
 
 								{/* Actions */}
-								<div className="flex items-center gap-2">
+								<div className="flex items-center gap-1.5">
 									<Button
 										variant="ghost"
 										size="icon"
 										onClick={() => handleRestore(note.id)}
-										className="w-9 h-9 text-[#4fb8b2] hover:bg-[#4fb8b2]/10 rounded-xl transition-all"
+										className="w-8.5 h-8.5 text-zinc-500 hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg transition-all cursor-pointer"
 										title="Restore Note"
 									>
-										<RotateCcw className="w-4 h-4" />
+										<RotateCcw className="w-3.5 h-3.5" />
 									</Button>
 									<Button
 										variant="ghost"
 										size="icon"
 										onClick={() => handlePermanentDelete(note.id)}
-										className="w-9 h-9 text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all"
+										className="w-8.5 h-8.5 text-rose-500 hover:bg-rose-500/10 rounded-lg transition-all cursor-pointer"
 										title="Delete Permanently"
 									>
-										<Trash2 className="w-4 h-4" />
+										<Trash2 className="w-3.5 h-3.5" />
 									</Button>
 								</div>
 							</div>
