@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 
+import { Editor } from "@/modules/note/components/editor";
+
 export const Route = createFileRoute("/_app/$noteId")({
 	loader: async ({ params }) => {
 		const note = await getNoteByIdFn({ data: { id: params.noteId } });
@@ -163,11 +165,10 @@ function RouteComponent() {
 						placeholder="Untitled"
 						className="w-full bg-transparent border-0 outline-none text-3xl font-bold text-foreground placeholder:text-muted-foreground/30 select-none tracking-tight font-sans"
 					/>
-					<textarea
-						value={content}
-						onChange={(e) => handleChange(title, e.target.value)}
+					<Editor
+						content={content || ""}
+						onChange={(newContent) => handleChange(title, newContent)}
 						placeholder="Start writing..."
-						className="w-full flex-1 bg-transparent border-0 outline-none resize-none text-foreground/85 placeholder:text-muted-foreground/20 text-sm leading-relaxed font-sans min-h-[450px]"
 					/>
 				</div>
 			</div>
