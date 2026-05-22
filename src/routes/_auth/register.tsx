@@ -5,6 +5,14 @@ import { BookOpen, CheckCircle, FileText, LayoutGrid, Sparkles } from "lucide-re
 import { requireSessionFn } from "#/modules/auth/auth.api";
 
 export const Route = createFileRoute("/_auth/register")({
+	beforeLoad: async () => {
+		const session = await requireSessionFn();
+		if (session) {
+			throw redirect({
+				to: "/",
+			});
+		}
+	},
 	component: RouteComponent,
 });
 
