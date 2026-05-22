@@ -14,7 +14,8 @@ import {
 	FileText,
 	Trash2,
 	CheckCircle2,
-	CloudLightning,
+	Loader2,
+	AlertCircle,
 	Sparkles,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
@@ -105,36 +106,37 @@ function RouteComponent() {
 	};
 
 	return (
-		<div className="flex-1 flex h-full overflow-hidden">
-			{/* Main Editor Panel - 65% width */}
-			<div className="flex-1 flex flex-col h-full border-r border-white/5 bg-[#0c1418]/40">
+		<div className="flex-1 flex h-full overflow-hidden bg-background">
+			{/* Main Editor Panel */}
+			<div className="flex-1 flex flex-col h-full border-r border-border">
 				{/* Top Bar */}
-				<header className="h-14 border-b border-white/5 px-6 flex items-center justify-between bg-white/[0.01]">
-					<div className="flex items-center gap-2 text-white/40 text-sm font-medium">
-						<FileText className="w-4 h-4 text-[#4fb8b2]" />
-						<span className="truncate max-w-[200px]">
+				<header className="h-14 border-b border-border px-6 flex items-center justify-between bg-card">
+					<div className="flex items-center gap-2 text-muted-foreground text-xs font-medium min-w-0">
+						<FileText className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
+						<span className="truncate max-w-[180px] font-semibold text-foreground">
 							{title || "Untitled"}
 						</span>
 					</div>
 
-					<div className="flex items-center gap-4">
+					<div className="flex items-center gap-3">
 						{/* Save Status Indicator */}
-						<div className="text-xs">
+						<div className="text-[11px]">
 							{saveStatus === "saved" && (
-								<span className="flex items-center gap-1.5 text-emerald-400/80 font-medium">
-									<CheckCircle2 className="w-3.5 h-3.5" />
+								<span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-500 font-medium">
+									<CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
 									Saved
 								</span>
 							)}
 							{saveStatus === "saving" && (
-								<span className="flex items-center gap-1.5 text-[#60d7cf] font-medium">
-									<CloudLightning className="w-3.5 h-3.5 animate-pulse" />
+								<span className="flex items-center gap-1.5 text-muted-foreground font-medium">
+									<Loader2 className="w-3 h-3 animate-spin shrink-0" />
 									Saving...
 								</span>
 							)}
 							{saveStatus === "error" && (
-								<span className="flex items-center gap-1.5 text-rose-400 font-medium">
-									Failed to save
+								<span className="flex items-center gap-1.5 text-rose-500 font-medium">
+									<AlertCircle className="w-3.5 h-3.5 shrink-0" />
+									Save failed
 								</span>
 							)}
 						</div>
@@ -144,53 +146,51 @@ function RouteComponent() {
 							variant="ghost"
 							size="icon"
 							onClick={handleSoftDelete}
-							className="text-white/40 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg w-8 h-8 flex items-center justify-center transition-colors"
+							className="text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 rounded-lg w-8 h-8 flex items-center justify-center transition-colors cursor-pointer"
 							title="Move to Trash"
 						>
-							<Trash2 className="w-4 h-4" />
+							<Trash2 className="w-3.5 h-3.5" />
 						</Button>
 					</div>
 				</header>
 
 				{/* Scrollable Editor Body */}
-				<div className="flex-1 overflow-y-auto p-8 lg:p-12 xl:p-16 max-w-3xl w-full mx-auto flex flex-col space-y-6">
+				<div className="flex-1 overflow-y-auto p-8 lg:p-12 xl:p-16 max-w-2xl w-full mx-auto flex flex-col space-y-6">
 					<input
 						type="text"
 						value={title}
 						onChange={(e) => handleChange(e.target.value, content)}
 						placeholder="Untitled"
-						className="w-full bg-transparent border-0 outline-none text-4xl lg:text-5xl font-bold text-white placeholder-white/20 select-none tracking-tight display-title"
+						className="w-full bg-transparent border-0 outline-none text-3xl font-bold text-foreground placeholder:text-muted-foreground/30 select-none tracking-tight font-sans"
 					/>
 					<textarea
 						value={content}
 						onChange={(e) => handleChange(title, e.target.value)}
 						placeholder="Start writing..."
-						className="w-full flex-1 bg-transparent border-0 outline-none resize-none text-white/80 placeholder-white/10 text-lg leading-relaxed font-sans min-h-[450px]"
+						className="w-full flex-1 bg-transparent border-0 outline-none resize-none text-foreground/85 placeholder:text-muted-foreground/20 text-sm leading-relaxed font-sans min-h-[450px]"
 					/>
 				</div>
 			</div>
 
-			{/* AI Summarization Panel - 35% width */}
-			<aside className="w-[380px] hidden xl:flex flex-col border-l border-white/5 bg-white/[0.01] backdrop-blur-sm p-6 overflow-y-auto space-y-6">
-				<div className="flex items-center gap-2">
-					<div className="w-8 h-8 rounded-lg bg-[#4fb8b2]/10 border border-[#4fb8b2]/20 flex items-center justify-center shadow">
-						<Sparkles className="w-4.5 h-4.5 text-[#4fb8b2]" />
+			{/* AI Summarization Panel - Notion/Linear Inspector style */}
+			<aside className="w-[300px] hidden xl:flex flex-col border-l border-border bg-zinc-50/50 dark:bg-zinc-950/20 p-5 overflow-y-auto space-y-5 shrink-0">
+				<div className="flex items-center gap-2 font-semibold text-xs text-foreground tracking-tight">
+					<div className="w-6.5 h-6.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-border flex items-center justify-center shadow-xs">
+						<Sparkles className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" />
 					</div>
-					<h3 className="font-bold text-base bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
-						AI Spark Summary
-					</h3>
+					<span>AI Spark Summary</span>
 				</div>
 
-				<div className="border border-white/5 rounded-2xl bg-white/[0.02] p-5 space-y-4 shadow-xl">
-					<div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-white/30">
+				<div className="border border-border rounded-xl bg-card p-4 space-y-3.5 shadow-xs">
+					<div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
 						<span>Status</span>
-						<span className="px-2 py-0.5 rounded-full bg-[#4fb8b2]/15 text-[#60d7cf] border border-[#4fb8b2]/25 font-bold">
+						<span className="px-1.5 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-900 text-foreground border border-border text-[9px]">
 							Fresh
 						</span>
 					</div>
 
-					<p className="text-white/60 text-sm leading-relaxed font-sans">
-						Start typing in the editor. As your note grows, Nozen's AI model
+					<p className="text-muted-foreground text-xs leading-relaxed font-sans">
+						Start typing in the editor. As your note grows, StudyVault's AI model
 						will automatically analyze and generate high-yield summaries,
 						flashcards, and conceptual breakdowns to boost your learning
 						retention.

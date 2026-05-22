@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
 import { createNoteFn } from "@/modules/note/note.api";
-import { FileText } from "lucide-react";
+import { FileText, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_app/new")({
 	component: RouteComponent,
@@ -76,37 +76,37 @@ function RouteComponent() {
 	}, []);
 
 	return (
-		<div className="flex-1 flex flex-col h-full overflow-hidden bg-[#0c1418]/60 backdrop-blur-sm">
+		<div className="flex-1 flex flex-col h-full overflow-hidden bg-background">
 			{/* Top Bar */}
-			<header className="h-14 border-b border-white/5 px-6 flex items-center justify-between">
-				<div className="flex items-center gap-2 text-white/40 text-sm font-medium">
-					<FileText className="w-4 h-4" />
-					<span>Draft</span>
+			<header className="h-14 border-b border-border px-6 flex items-center justify-between bg-card">
+				<div className="flex items-center gap-2 text-muted-foreground text-xs font-medium">
+					<FileText className="w-3.5 h-3.5" />
+					<span>Draft Note</span>
 				</div>
-				<div className="flex items-center gap-3 text-xs text-white/40">
+				<div className="flex items-center gap-3 text-[11px] text-muted-foreground">
 					{isSaving ? (
-						<span className="flex items-center gap-1.5 font-medium text-[#60d7cf]">
-							<span className="w-1.5 h-1.5 rounded-full bg-[#60d7cf] animate-pulse" />
+						<span className="flex items-center gap-1.5 font-medium text-foreground">
+							<Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
 							Saving draft...
 						</span>
 					) : (
 						<span className="flex items-center gap-1.5">
-							<span className="w-1.5 h-1.5 rounded-full bg-white/20" />
-							Drafting (Not saved yet)
+							<span className="w-1.5 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+							Not saved yet
 						</span>
 					)}
 				</div>
 			</header>
 
 			{/* Editor Body */}
-			<div className="flex-1 overflow-y-auto p-8 lg:p-12 xl:p-16 max-w-4xl w-full mx-auto flex flex-col space-y-6">
+			<div className="flex-1 overflow-y-auto p-8 lg:p-12 xl:p-16 max-w-2xl w-full mx-auto flex flex-col space-y-6">
 				{/* Title Input */}
 				<input
 					type="text"
 					value={title}
 					onChange={(e) => handleType(e.target.value, content)}
 					placeholder="Untitled"
-					className="w-full bg-transparent border-0 outline-none text-4xl lg:text-5xl font-bold text-white placeholder-white/20 select-none tracking-tight display-title"
+					className="w-full bg-transparent border-0 outline-none text-3xl font-bold text-foreground placeholder:text-muted-foreground/30 select-none tracking-tight font-sans"
 				/>
 
 				{/* Content Textarea */}
@@ -114,7 +114,7 @@ function RouteComponent() {
 					value={content}
 					onChange={(e) => handleType(title, e.target.value)}
 					placeholder="Start writing..."
-					className="w-full flex-1 bg-transparent border-0 outline-none resize-none text-white/80 placeholder-white/10 text-lg leading-relaxed font-sans min-h-[400px]"
+					className="w-full flex-1 bg-transparent border-0 outline-none resize-none text-foreground/85 placeholder:text-muted-foreground/20 text-sm leading-relaxed font-sans min-h-[400px]"
 				/>
 			</div>
 		</div>
