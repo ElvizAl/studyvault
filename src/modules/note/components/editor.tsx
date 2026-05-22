@@ -12,6 +12,7 @@ export function Editor({ content, onChange, placeholder }: EditorProps) {
 	const editor = useEditor({
 		extensions: editorExtensions,
 		content,
+		immediatelyRender: false,
 		editorProps: {
 			attributes: {
 				class:

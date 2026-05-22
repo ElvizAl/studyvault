@@ -40,17 +40,18 @@ function RouteComponent() {
 
 	const [title, setTitle] = useState(note.title);
 	const [content, setContent] = useState(note.content);
-	const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "error">(
-		"saved",
-	);
+	const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "error" | "idle">("idle");
 	const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+	const savedIndicatorTimeout = useRef<NodeJS.Timeout | null>(null);
+	const pendingSaveData = useRef<{ title: string; content: string } | null>(null);
 
 	// Sync local state with loaded note if noteId changes
 	useEffect(() => {
 		setTitle(note.title);
 		setContent(note.content);
-		setSaveStatus("saved");
-	}, [note.title, note.content]);
+		setSaveStatus("idle");
+		pendingSaveData.current = null;
+	}, [note.id]); // trigger when note ID changes
 
 	// Auto-save function
 	const performSave = async (updatedTitle: string, updatedContent: string) => {
@@ -64,6 +65,13 @@ function RouteComponent() {
 				},
 			});
 			setSaveStatus("saved");
+			pendingSaveData.current = null;
+			
+			if (savedIndicatorTimeout.current) clearTimeout(savedIndicatorTimeout.current);
+			savedIndicatorTimeout.current = setTimeout(() => {
+				setSaveStatus((prev) => (prev === "saved" ? "idle" : prev));
+			}, 2000);
+
 			// Invalidate router to update note title in sidebar
 			await router.invalidate();
 		} catch (error) {
@@ -76,25 +84,62 @@ function RouteComponent() {
 	const handleChange = (newTitle: string, newContent: string) => {
 		setTitle(newTitle);
 		setContent(newContent);
-		setSaveStatus("saving");
+		pendingSaveData.current = { title: newTitle, content: newContent };
+		
+		if (saveStatus !== "error") {
+			setSaveStatus("saving");
+		}
 
 		if (saveTimeout.current) {
 			clearTimeout(saveTimeout.current);
 		}
 
 		saveTimeout.current = setTimeout(() => {
-			performSave(newTitle, newContent);
-		}, 800); // 800ms debounce
+			if (pendingSaveData.current) {
+				performSave(pendingSaveData.current.title, pendingSaveData.current.content);
+			}
+		}, 1500); // 1.5s debounce
 	};
 
-	// Cleanup timeout on unmount
+	// Warning before unload if unsaved changes exist
 	useEffect(() => {
-		return () => {
-			if (saveTimeout.current) {
-				clearTimeout(saveTimeout.current);
+		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+			if (pendingSaveData.current || saveStatus === "saving" || saveStatus === "error") {
+				e.preventDefault();
+				e.returnValue = "";
 			}
 		};
+		window.addEventListener("beforeunload", handleBeforeUnload);
+		return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+	}, [saveStatus]);
+
+	// Auto-retry on network reconnect
+	useEffect(() => {
+		const handleOnline = () => {
+			if (saveStatus === "error" && pendingSaveData.current) {
+				performSave(pendingSaveData.current.title, pendingSaveData.current.content);
+			}
+		};
+		window.addEventListener("online", handleOnline);
+		return () => window.removeEventListener("online", handleOnline);
+	}, [saveStatus]);
+
+	// Cleanup timeouts on unmount
+	useEffect(() => {
+		return () => {
+			if (saveTimeout.current) clearTimeout(saveTimeout.current);
+			if (savedIndicatorTimeout.current) clearTimeout(savedIndicatorTimeout.current);
+		};
 	}, []);
+
+	// Retry failed save manually
+	const handleRetry = () => {
+		if (pendingSaveData.current) {
+			performSave(pendingSaveData.current.title, pendingSaveData.current.content);
+		} else {
+			performSave(title, content);
+		}
+	};
 
 	// Handle Soft Delete
 	const handleSoftDelete = async () => {
@@ -122,24 +167,28 @@ function RouteComponent() {
 
 					<div className="flex items-center gap-3">
 						{/* Save Status Indicator */}
-						<div className="text-[11px]">
+						<div className="text-[11px] flex items-center h-8">
 							{saveStatus === "saved" && (
-								<span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-500 font-medium">
+								<span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-500 font-medium animate-in fade-in duration-300">
 									<CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
 									Saved
 								</span>
 							)}
 							{saveStatus === "saving" && (
-								<span className="flex items-center gap-1.5 text-muted-foreground font-medium">
+								<span className="flex items-center gap-1.5 text-muted-foreground font-medium animate-in fade-in duration-300">
 									<Loader2 className="w-3 h-3 animate-spin shrink-0" />
 									Saving...
 								</span>
 							)}
 							{saveStatus === "error" && (
-								<span className="flex items-center gap-1.5 text-rose-500 font-medium">
+								<button
+									onClick={handleRetry}
+									className="flex items-center gap-1.5 text-rose-500 font-medium hover:bg-rose-500/10 px-2 py-1 rounded-md transition-colors cursor-pointer animate-in fade-in duration-300"
+									title="Click to retry saving"
+								>
 									<AlertCircle className="w-3.5 h-3.5 shrink-0" />
-									Save failed
-								</span>
+									Save failed - Retry
+								</button>
 							)}
 						</div>
 
