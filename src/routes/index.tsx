@@ -70,9 +70,9 @@ function LandingPage() {
 			{/* Hero */}
 			<section className="relative overflow-hidden">
 				<div className="absolute inset-0 pointer-events-none">
-					<div className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-[600px] bg-gradient-to-br from-violet-500/20 via-indigo-500/10 to-transparent rounded-full blur-3xl" />
-					<div className="absolute top-40 right-0 w-100 h-100 bg-gradient-to-bl from-fuchsia-500/10 to-transparent rounded-full blur-3xl" />
-					<div className="absolute top-60 left-0 w-[300px] h-[300px] bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-3xl" />
+					<div className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-150 bg-linear-to-br from-violet-500/20 via-indigo-500/10 to-transparent rounded-full blur-3xl" />
+					<div className="absolute top-40 right-0 w-100 h-100 bg-linear-to-bl from-fuchsia-500/10 to-transparent rounded-full blur-3xl" />
+					<div className="absolute top-60 left-0 w-75 h-75 bg-linear-to-br from-cyan-500/10 to-transparent rounded-full blur-3xl" />
 				</div>
 				<div
 					className="absolute inset-0 pointer-events-none opacity-[0.03]"
@@ -105,7 +105,7 @@ function LandingPage() {
 							<Link to="/register">
 								<Button
 									size="lg"
-									className="items-center gap-2.5 bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 px-8 py-[26px] rounded-2xl text-base font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all shadow-sm border border-zinc-200 dark:border-zinc-800 hover:scale-[1.02] active:scale-[0.98]"
+									className="items-center gap-2.5 bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 px-8 py-6.5 rounded-2xl text-base font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all shadow-sm border border-zinc-200 dark:border-zinc-800 hover:scale-[1.02] active:scale-[0.98]"
 								>
 									Start for free
 									<ArrowRight className="w-4.5 h-4.5 group-hover:translate-x-0.5 transition-transform" />
@@ -151,7 +151,7 @@ function LandingPage() {
 								</div>
 							</div>
 							{/* App content mockup */}
-							<div className="flex min-h-[320px] lg:min-h-[420px]">
+							<div className="flex min-h-80 lg:min-h-105">
 								{/* Sidebar */}
 								<div className="hidden md:block w-55 border-r border-zinc-800 bg-zinc-900/50 p-4 space-y-4">
 									<div className="flex items-center gap-2 mb-6">
