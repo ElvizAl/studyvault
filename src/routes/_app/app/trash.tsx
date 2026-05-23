@@ -7,7 +7,7 @@ import {
 import { Trash2, RotateCcw, Info, FileText } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 
-export const Route = createFileRoute("/_app/trash")({
+export const Route = createFileRoute("/_app/app/trash")({
 	loader: async () => {
 		const trashNotes = await getTrashNotesFn();
 		return { trashNotes };

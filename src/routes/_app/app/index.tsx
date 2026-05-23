@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/shared/components/ui/button";
 import { Plus, BookOpen, Sparkles } from "lucide-react";
 
-export const Route = createFileRoute("/_app/")({
+export const Route = createFileRoute("/_app/app/")({
 	component: RouteComponent,
 });
 
@@ -10,7 +10,7 @@ function RouteComponent() {
 	const navigate = useNavigate();
 
 	const handleCreateNote = () => {
-		navigate({ to: "/new" });
+		navigate({ to: "/app/new" });
 	};
 
 	return (
