@@ -50,7 +50,7 @@ export function LoginForm({
 
 			if (result.success) {
 				toast.success(result.message);
-				navigate({ to: "/" });
+				navigate({ to: "/app" });
 			} else {
 				setError("root", { message: result.error });
 				toast.error(result.error);
@@ -203,7 +203,7 @@ export function LoginForm({
 						onClick={async () => {
 							await authClient.signIn.social({
 								provider: "google",
-								callbackURL: "/",
+								callbackURL: "/app",
 							});
 						}}
 					>

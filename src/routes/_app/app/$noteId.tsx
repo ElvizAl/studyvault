@@ -22,11 +22,11 @@ import { Button } from "@/shared/components/ui/button";
 
 import { Editor } from "@/modules/note/components/editor";
 
-export const Route = createFileRoute("/_app/$noteId")({
+export const Route = createFileRoute("/_app/app/$noteId")({
 	loader: async ({ params }) => {
 		const note = await getNoteByIdFn({ data: { id: params.noteId } });
 		if (!note) {
-			throw redirect({ to: "/" });
+			throw redirect({ to: "/app" });
 		}
 		return { note };
 	},
@@ -188,7 +188,7 @@ function RouteComponent() {
 		try {
 			await deleteNoteFn({ data: { id: note.id } });
 			await router.invalidate();
-			navigate({ to: "/" });
+			navigate({ to: "/app" });
 		} catch (error) {
 			console.error("Failed to delete note", error);
 		}

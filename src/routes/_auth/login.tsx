@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_auth/login")({
 		const session = await requireSessionFn();
 		if (session) {
 			throw redirect({
-				to: "/",
+				to: "/app",
 			});
 		}
 	},

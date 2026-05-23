@@ -4,7 +4,7 @@ import { Settings, LogOut, User } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { signOut } from "@/shared/lib/auth-client";
 
-export const Route = createFileRoute("/_app/settings")({
+export const Route = createFileRoute("/_app/app/settings")({
 	beforeLoad: async () => {
 		const session = await requireSessionFn();
 		if (!session) {

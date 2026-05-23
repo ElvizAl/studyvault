@@ -21,7 +21,7 @@ import { Button } from "@/shared/components/ui/button";
 import { signOut } from "@/shared/lib/auth-client";
 import { useState, useRef, useEffect, useCallback } from "react";
 
-export const Route = createFileRoute("/_app")({
+export const Route = createFileRoute("/_app/app")({
 	beforeLoad: async () => {
 		const session = await requireSessionFn();
 		if (!session) {
@@ -60,7 +60,7 @@ function RouteComponent() {
 	const searchInputRef = useRef<HTMLInputElement>(null);
 
 	const handleCreateDraft = () => {
-		navigate({ to: "/new" });
+		navigate({ to: "/app/new" });
 	};
 
 	const handleSignOut = async () => {
@@ -142,7 +142,7 @@ function RouteComponent() {
 				{/* Sidebar Header */}
 				<div className="h-14 px-4 border-b border-border flex items-center justify-between">
 					<Link
-						to="/"
+						to="/app"
 						className="flex items-center gap-2 font-semibold text-sm tracking-tight text-foreground group"
 					>
 						<div className="flex items-center justify-center w-7 h-7 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm">
@@ -204,7 +204,7 @@ function RouteComponent() {
 									{searchResults.map((result) => (
 										<Link
 											key={result.id}
-											to="/$noteId"
+											to="/app/$noteId"
 											params={{ noteId: result.id }}
 											onClick={() => {
 												setSearchOpen(false);
@@ -256,7 +256,7 @@ function RouteComponent() {
 								{notes.map((note) => (
 									<Link
 										key={note.id}
-										to="/$noteId"
+										to="/app/$noteId"
 										params={{ noteId: note.id }}
 										activeProps={{
 											className:
@@ -282,7 +282,7 @@ function RouteComponent() {
 				{/* Footer Options (Settings, Trash, Logout) */}
 				<div className="p-2.5 border-t border-border bg-zinc-100/40 dark:bg-zinc-900/10 space-y-0.5">
 					<Link
-						to="/trash"
+						to="/app/trash"
 						activeProps={{
 							className:
 								"bg-zinc-200/60 dark:bg-zinc-800/60 text-foreground font-semibold",
@@ -297,7 +297,7 @@ function RouteComponent() {
 						<span>Trash</span>
 					</Link>
 					<Link
-						to="/settings"
+						to="/app/settings"
 						activeProps={{
 							className:
 								"bg-zinc-200/60 dark:bg-zinc-800/60 text-foreground font-semibold",

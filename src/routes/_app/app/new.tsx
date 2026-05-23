@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from "react";
 import { createNoteFn } from "@/modules/note/note.api";
 import { FileText, Loader2 } from "lucide-react";
 
-export const Route = createFileRoute("/_app/new")({
+export const Route = createFileRoute("/_app/app/new")({
 	component: RouteComponent,
 });
 
@@ -40,7 +40,7 @@ function RouteComponent() {
 
 				// Redirect to the real note ID
 				navigate({
-					to: "/$noteId",
+					to: "/app/$noteId",
 					params: { noteId: note.id },
 					replace: true, // Replace /new in history so back button works correctly
 				});

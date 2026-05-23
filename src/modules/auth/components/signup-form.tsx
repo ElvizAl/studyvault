@@ -55,7 +55,7 @@ export function SignupForm({
 
 			if (result.success) {
 				toast.success(result.message);
-				navigate({ to: "/login" as string });
+				navigate({ to: "/login" });
 			} else {
 				setError("root", { message: result.error });
 				toast.error(result.error);
@@ -253,7 +253,7 @@ export function SignupForm({
 						onClick={async () => {
 							await authClient.signIn.social({
 								provider: "google",
-								callbackURL: "/",
+								callbackURL: "/app",
 							});
 						}}
 					>
@@ -285,7 +285,10 @@ export function SignupForm({
 
 				<div className="text-center text-xs text-muted-foreground mt-1">
 					Already have an account?{" "}
-					<Link to="/" className="font-medium text-foreground hover:underline">
+					<Link
+						to="/login"
+						className="font-medium text-foreground hover:underline"
+					>
 						Log in here
 					</Link>
 				</div>
