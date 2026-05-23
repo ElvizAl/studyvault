@@ -70,8 +70,8 @@ function LandingPage() {
 			{/* Hero */}
 			<section className="relative overflow-hidden">
 				<div className="absolute inset-0 pointer-events-none">
-					<div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-br from-violet-500/20 via-indigo-500/10 to-transparent rounded-full blur-3xl" />
-					<div className="absolute top-40 right-0 w-[400px] h-[400px] bg-gradient-to-bl from-fuchsia-500/10 to-transparent rounded-full blur-3xl" />
+					<div className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-[600px] bg-gradient-to-br from-violet-500/20 via-indigo-500/10 to-transparent rounded-full blur-3xl" />
+					<div className="absolute top-40 right-0 w-100 h-100 bg-gradient-to-bl from-fuchsia-500/10 to-transparent rounded-full blur-3xl" />
 					<div className="absolute top-60 left-0 w-[300px] h-[300px] bg-gradient-to-br from-cyan-500/10 to-transparent rounded-full blur-3xl" />
 				</div>
 				<div
@@ -153,7 +153,7 @@ function LandingPage() {
 							{/* App content mockup */}
 							<div className="flex min-h-[320px] lg:min-h-[420px]">
 								{/* Sidebar */}
-								<div className="hidden md:block w-[220px] border-r border-zinc-800 bg-zinc-900/50 p-4 space-y-4">
+								<div className="hidden md:block w-55 border-r border-zinc-800 bg-zinc-900/50 p-4 space-y-4">
 									<div className="flex items-center gap-2 mb-6">
 										<div className="w-6 h-6 rounded-md bg-zinc-900 dark:bg-zinc-100 flex items-center justify-center">
 											<BookOpen className="w-3 h-3 text-zinc-100 dark:text-zinc-900" />
@@ -208,7 +208,7 @@ function LandingPage() {
 							</div>
 						</div>
 						{/* Glow under the card */}
-						<div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-16 bg-gradient-to-r from-zinc-500/20 via-zinc-400/10 to-zinc-500/20 blur-3xl rounded-full" />
+						<div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-3/4 h-16 bg-linear-to-r from-zinc-500/20 via-zinc-400/10 to-zinc-500/20 blur-3xl rounded-full" />
 					</div>
 				</div>
 			</section>

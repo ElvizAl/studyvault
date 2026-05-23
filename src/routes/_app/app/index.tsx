@@ -10,7 +10,7 @@ function RouteComponent() {
 	const navigate = useNavigate();
 
 	const handleCreateNote = () => {
-		navigate({ to: "/app/new" });
+		navigate({ to: "/app/new", search: { notebookId: undefined } });
 	};
 
 	return (

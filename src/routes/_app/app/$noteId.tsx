@@ -202,7 +202,7 @@ function RouteComponent() {
 				<header className="h-14 border-b border-border px-6 flex items-center justify-between bg-card">
 					<div className="flex items-center gap-2 text-muted-foreground text-xs font-medium min-w-0">
 						<FileText className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
-						<span className="truncate max-w-[180px] font-semibold text-foreground">
+						<span className="truncate max-w-45 font-semibold text-foreground">
 							{title || "Untitled"}
 						</span>
 					</div>
@@ -266,7 +266,7 @@ function RouteComponent() {
 			</div>
 
 			{/* AI Summarization Panel - Notion/Linear Inspector style */}
-			<aside className="w-[300px] hidden xl:flex flex-col border-l border-border bg-zinc-50/50 dark:bg-zinc-950/20 p-5 overflow-y-auto space-y-5 shrink-0">
+			<aside className="w-75 hidden xl:flex flex-col border-l border-border bg-zinc-50/50 dark:bg-zinc-950/20 p-5 overflow-y-auto space-y-5 shrink-0">
 				<div className="flex items-center gap-2 font-semibold text-xs text-foreground tracking-tight">
 					<div className="w-6.5 h-6.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-border flex items-center justify-center shadow-xs">
 						<Sparkles className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" />
