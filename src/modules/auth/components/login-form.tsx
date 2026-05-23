@@ -81,7 +81,9 @@ export function LoginForm({
 		>
 			<FieldGroup className="gap-5">
 				<div className="flex flex-col items-center gap-1 text-center">
-					<h1 className="text-xl font-semibold tracking-tight text-foreground">Welcome Back</h1>
+					<h1 className="text-xl font-semibold tracking-tight text-foreground">
+						Welcome Back
+					</h1>
 					<p className="text-xs text-muted-foreground leading-relaxed">
 						Log in to your StudyVault AI account
 					</p>
@@ -111,7 +113,9 @@ export function LoginForm({
 				)}
 
 				<Field data-invalid={!!errors.email} className="gap-1">
-					<FieldLabel htmlFor="email" className="text-xs">Email</FieldLabel>
+					<FieldLabel htmlFor="email" className="text-xs">
+						Email
+					</FieldLabel>
 					<Input
 						id="email"
 						type="email"
@@ -121,14 +125,20 @@ export function LoginForm({
 						className="h-8 text-xs rounded-lg"
 					/>
 					{errors.email ? (
-						<FieldError className="text-[11px]">{errors.email.message}</FieldError>
+						<FieldError className="text-[11px]">
+							{errors.email.message}
+						</FieldError>
 					) : (
-						<FieldDescription className="text-[10px] text-muted-foreground">Enter your registered email address.</FieldDescription>
+						<FieldDescription className="text-[10px] text-muted-foreground">
+							Enter your registered email address.
+						</FieldDescription>
 					)}
 				</Field>
 
 				<Field data-invalid={!!errors.password} className="gap-1">
-					<FieldLabel htmlFor="password" className="text-xs">Password</FieldLabel>
+					<FieldLabel htmlFor="password" className="text-xs">
+						Password
+					</FieldLabel>
 					<Input
 						id="password"
 						type="password"
@@ -138,12 +148,18 @@ export function LoginForm({
 						className="h-8 text-xs rounded-lg"
 					/>
 					{errors.password && (
-						<FieldError className="text-[11px]">{errors.password.message}</FieldError>
+						<FieldError className="text-[11px]">
+							{errors.password.message}
+						</FieldError>
 					)}
 				</Field>
 
 				<Field className="mt-2">
-					<Button type="submit" className="w-full h-8 text-xs rounded-lg font-medium bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200" disabled={isSubmitting}>
+					<Button
+						type="submit"
+						className="w-full h-8 text-xs rounded-lg font-medium bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200"
+						disabled={isSubmitting}
+					>
 						{isSubmitting ? (
 							<>
 								<svg
@@ -174,7 +190,9 @@ export function LoginForm({
 					</Button>
 				</Field>
 
-				<FieldSeparator className="text-[10px] text-muted-foreground my-1">Or continue with</FieldSeparator>
+				<FieldSeparator className="text-[10px] text-muted-foreground my-1">
+					Or continue with
+				</FieldSeparator>
 
 				<Field>
 					<Button

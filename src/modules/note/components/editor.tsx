@@ -8,7 +8,7 @@ interface EditorProps {
 	placeholder?: string;
 }
 
-export function Editor({ content, onChange, placeholder }: EditorProps) {
+export function Editor({ content, onChange }: EditorProps) {
 	const editor = useEditor({
 		extensions: editorExtensions,
 		content,

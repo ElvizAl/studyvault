@@ -59,8 +59,9 @@ function RouteComponent() {
 					<Info className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
 					<p className="leading-relaxed">
 						Notes in the trash have been soft-deleted. You can restore them to
-						recover your work, or permanently delete them. Permanent deletion
-						is irreversible and will remove all contents and associated AI summaries forever.
+						recover your work, or permanently delete them. Permanent deletion is
+						irreversible and will remove all contents and associated AI
+						summaries forever.
 					</p>
 				</div>
 
@@ -70,7 +71,9 @@ function RouteComponent() {
 							<Trash2 className="w-5 h-5 text-muted-foreground/30" />
 						</div>
 						<div className="space-y-1">
-							<h3 className="font-semibold text-sm text-foreground">Trash is Empty</h3>
+							<h3 className="font-semibold text-sm text-foreground">
+								Trash is Empty
+							</h3>
 							<p className="text-muted-foreground text-xs">
 								No soft-deleted notes found.
 							</p>
