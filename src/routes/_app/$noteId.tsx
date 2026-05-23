@@ -4,7 +4,7 @@ import {
 	useNavigate,
 	useRouter,
 } from "@tanstack/react-router";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
 	getNoteByIdFn,
 	updateNoteFn,
@@ -40,10 +40,14 @@ function RouteComponent() {
 
 	const [title, setTitle] = useState(note.title);
 	const [content, setContent] = useState(note.content);
-	const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "error" | "idle">("idle");
+	const [saveStatus, setSaveStatus] = useState<
+		"saved" | "saving" | "error" | "idle"
+	>("idle");
 	const saveTimeout = useRef<NodeJS.Timeout | null>(null);
 	const savedIndicatorTimeout = useRef<NodeJS.Timeout | null>(null);
-	const pendingSaveData = useRef<{ title: string; content: string } | null>(null);
+	const pendingSaveData = useRef<{ title: string; content: string } | null>(
+		null,
+	);
 
 	// Sync local state with loaded note if noteId changes
 	useEffect(() => {
@@ -51,41 +55,45 @@ function RouteComponent() {
 		setContent(note.content);
 		setSaveStatus("idle");
 		pendingSaveData.current = null;
-	}, [note.id]); // trigger when note ID changes
+	}, [note.content, note.title]); // trigger when note ID changes
 
 	// Auto-save function
-	const performSave = async (updatedTitle: string, updatedContent: string) => {
-		setSaveStatus("saving");
-		try {
-			await updateNoteFn({
-				data: {
-					id: note.id,
-					title: updatedTitle,
-					content: updatedContent,
-				},
-			});
-			setSaveStatus("saved");
-			pendingSaveData.current = null;
-			
-			if (savedIndicatorTimeout.current) clearTimeout(savedIndicatorTimeout.current);
-			savedIndicatorTimeout.current = setTimeout(() => {
-				setSaveStatus((prev) => (prev === "saved" ? "idle" : prev));
-			}, 2000);
+	const performSave = useCallback(
+		async (updatedTitle: string, updatedContent: string) => {
+			setSaveStatus("saving");
+			try {
+				await updateNoteFn({
+					data: {
+						id: note.id,
+						title: updatedTitle,
+						content: updatedContent,
+					},
+				});
+				setSaveStatus("saved");
+				pendingSaveData.current = null;
 
-			// Invalidate router to update note title in sidebar
-			await router.invalidate();
-		} catch (error) {
-			console.error("Auto-save failed", error);
-			setSaveStatus("error");
-		}
-	};
+				if (savedIndicatorTimeout.current)
+					clearTimeout(savedIndicatorTimeout.current);
+				savedIndicatorTimeout.current = setTimeout(() => {
+					setSaveStatus((prev) => (prev === "saved" ? "idle" : prev));
+				}, 2000);
+
+				// Invalidate router to update note title in sidebar
+				await router.invalidate();
+			} catch (error) {
+				console.error("Auto-save failed", error);
+				setSaveStatus("error");
+			}
+		},
+		[note.id, router],
+	);
 
 	// Handle input changes with debouncing
 	const handleChange = (newTitle: string, newContent: string) => {
 		setTitle(newTitle);
 		setContent(newContent);
 		pendingSaveData.current = { title: newTitle, content: newContent };
-		
+
 		if (saveStatus !== "error") {
 			setSaveStatus("saving");
 		}
@@ -96,7 +104,10 @@ function RouteComponent() {
 
 		saveTimeout.current = setTimeout(() => {
 			if (pendingSaveData.current) {
-				performSave(pendingSaveData.current.title, pendingSaveData.current.content);
+				performSave(
+					pendingSaveData.current.title,
+					pendingSaveData.current.content,
+				);
 			}
 		}, 1500); // 1.5s debounce
 	};
@@ -104,7 +115,11 @@ function RouteComponent() {
 	// Warning before unload if unsaved changes exist
 	useEffect(() => {
 		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-			if (pendingSaveData.current || saveStatus === "saving" || saveStatus === "error") {
+			if (
+				pendingSaveData.current ||
+				saveStatus === "saving" ||
+				saveStatus === "error"
+			) {
 				e.preventDefault();
 				e.returnValue = "";
 			}
@@ -117,25 +132,32 @@ function RouteComponent() {
 	useEffect(() => {
 		const handleOnline = () => {
 			if (saveStatus === "error" && pendingSaveData.current) {
-				performSave(pendingSaveData.current.title, pendingSaveData.current.content);
+				performSave(
+					pendingSaveData.current.title,
+					pendingSaveData.current.content,
+				);
 			}
 		};
 		window.addEventListener("online", handleOnline);
 		return () => window.removeEventListener("online", handleOnline);
-	}, [saveStatus]);
+	}, [saveStatus, performSave]);
 
 	// Cleanup timeouts on unmount
 	useEffect(() => {
 		return () => {
 			if (saveTimeout.current) clearTimeout(saveTimeout.current);
-			if (savedIndicatorTimeout.current) clearTimeout(savedIndicatorTimeout.current);
+			if (savedIndicatorTimeout.current)
+				clearTimeout(savedIndicatorTimeout.current);
 		};
 	}, []);
 
 	// Retry failed save manually
 	const handleRetry = () => {
 		if (pendingSaveData.current) {
-			performSave(pendingSaveData.current.title, pendingSaveData.current.content);
+			performSave(
+				pendingSaveData.current.title,
+				pendingSaveData.current.content,
+			);
 		} else {
 			performSave(title, content);
 		}
@@ -182,6 +204,7 @@ function RouteComponent() {
 							)}
 							{saveStatus === "error" && (
 								<button
+									type="button"
 									onClick={handleRetry}
 									className="flex items-center gap-1.5 text-rose-500 font-medium hover:bg-rose-500/10 px-2 py-1 rounded-md transition-colors cursor-pointer animate-in fade-in duration-300"
 									title="Click to retry saving"
@@ -240,8 +263,8 @@ function RouteComponent() {
 					</div>
 
 					<p className="text-muted-foreground text-xs leading-relaxed font-sans">
-						Start typing in the editor. As your note grows, StudyVault's AI model
-						will automatically analyze and generate high-yield summaries,
+						Start typing in the editor. As your note grows, StudyVault's AI
+						model will automatically analyze and generate high-yield summaries,
 						flashcards, and conceptual breakdowns to boost your learning
 						retention.
 					</p>

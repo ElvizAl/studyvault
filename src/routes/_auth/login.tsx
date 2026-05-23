@@ -2,7 +2,13 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { LoginForm } from "#/modules/auth/components/login-form";
 import { requireSessionFn } from "@/modules/auth/auth.api";
-import { BookOpen, CheckCircle, FileText, LayoutGrid, Sparkles } from "lucide-react";
+import {
+	BookOpen,
+	CheckCircle,
+	FileText,
+	LayoutGrid,
+	Sparkles,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_auth/login")({
 	beforeLoad: async () => {
@@ -55,26 +61,33 @@ function RouteComponent() {
 					<h1 className="text-3xl font-bold tracking-tight text-foreground leading-tight mb-3">
 						Welcome back.
 					</h1>
-					
+
 					<p className="text-sm text-muted-foreground leading-relaxed mb-8">
-						Access your personal digital vault and resume your learning journey powered by intelligent AI feedback.
+						Access your personal digital vault and resume your learning journey
+						powered by intelligent AI feedback.
 					</p>
 
 					{/* Features list - minimal cards with thin borders */}
 					<div className="space-y-4">
 						{[
 							{
-								icon: <FileText className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />,
+								icon: (
+									<FileText className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
+								),
 								title: "Smart Notes",
 								desc: "Capture concepts with our distraction-free, fluid writing environment",
 							},
 							{
-								icon: <LayoutGrid className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />,
+								icon: (
+									<LayoutGrid className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
+								),
 								title: "Notebooks & Trash",
 								desc: "Organize files efficiently and retrieve deleted items at any time",
 							},
 							{
-								icon: <CheckCircle className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />,
+								icon: (
+									<CheckCircle className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
+								),
 								title: "AI Summarization",
 								desc: "Generate concise summaries and takeaways from notes automatically",
 							},
@@ -102,7 +115,8 @@ function RouteComponent() {
 				{/* Bottom Quote block */}
 				<div className="relative z-10 pt-6 border-t border-border">
 					<p className="text-xs text-muted-foreground leading-relaxed italic">
-						"StudyVault AI completely streamlines my study workflow. Keeping notes structured and summarized in one workspace saves hours."
+						"StudyVault AI completely streamlines my study workflow. Keeping
+						notes structured and summarized in one workspace saves hours."
 					</p>
 					<p className="text-[11px] text-foreground font-semibold mt-2">
 						— StudyVault Platform
@@ -113,7 +127,10 @@ function RouteComponent() {
 			{/* Right Panel - Centered Login Form */}
 			<div className="flex flex-col justify-between p-6 md:p-10 lg:p-14">
 				<div className="flex items-center justify-between">
-					<Link to="/" className="flex items-center gap-2 font-medium group lg:hidden">
+					<Link
+						to="/"
+						className="flex items-center gap-2 font-medium group lg:hidden"
+					>
 						<div className="flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-900 text-zinc-100 border border-zinc-800">
 							<BookOpen className="w-4 h-4" />
 						</div>

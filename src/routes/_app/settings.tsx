@@ -1,8 +1,4 @@
-import {
-	createFileRoute,
-	redirect,
-	useRouter,
-} from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { requireSessionFn } from "@/modules/auth/auth.api";
 import { Settings, LogOut, User } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
@@ -49,7 +45,9 @@ function RouteComponent() {
 			<div className="flex-1 overflow-y-auto p-6 lg:p-10 max-w-2xl w-full mx-auto space-y-6">
 				<div className="border border-border rounded-xl bg-card p-6 space-y-6 shadow-xs">
 					<div>
-						<h3 className="font-semibold text-base text-foreground">General Profile</h3>
+						<h3 className="font-semibold text-base text-foreground">
+							General Profile
+						</h3>
 						<p className="text-muted-foreground text-xs mt-0.5">
 							Manage your personal user preferences and active session state.
 						</p>

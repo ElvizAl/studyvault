@@ -87,7 +87,9 @@ export function SignupForm({
 		>
 			<FieldGroup className="gap-4">
 				<div className="flex flex-col items-center gap-1 text-center">
-					<h1 className="text-xl font-semibold tracking-tight text-foreground">Create an Account</h1>
+					<h1 className="text-xl font-semibold tracking-tight text-foreground">
+						Create an Account
+					</h1>
 					<p className="text-xs text-muted-foreground leading-relaxed">
 						Join StudyVault AI and organize your learning
 					</p>
@@ -117,7 +119,9 @@ export function SignupForm({
 				)}
 
 				<Field data-invalid={!!errors.name} className="gap-1">
-					<FieldLabel htmlFor="name" className="text-xs">Full Name</FieldLabel>
+					<FieldLabel htmlFor="name" className="text-xs">
+						Full Name
+					</FieldLabel>
 					<Input
 						id="name"
 						type="text"
@@ -126,11 +130,15 @@ export function SignupForm({
 						{...register("name")}
 						className="h-8 text-xs rounded-lg"
 					/>
-					<FieldError className="text-[11px]">{errors.name?.message}</FieldError>
+					<FieldError className="text-[11px]">
+						{errors.name?.message}
+					</FieldError>
 				</Field>
 
 				<Field data-invalid={!!errors.email} className="gap-1">
-					<FieldLabel htmlFor="email" className="text-xs">Email</FieldLabel>
+					<FieldLabel htmlFor="email" className="text-xs">
+						Email
+					</FieldLabel>
 					<Input
 						id="email"
 						type="email"
@@ -140,14 +148,20 @@ export function SignupForm({
 						className="h-8 text-xs rounded-lg"
 					/>
 					{errors.email ? (
-						<FieldError className="text-[11px]">{errors.email.message}</FieldError>
+						<FieldError className="text-[11px]">
+							{errors.email.message}
+						</FieldError>
 					) : (
-						<FieldDescription className="text-[10px] text-muted-foreground">Used for login and sync.</FieldDescription>
+						<FieldDescription className="text-[10px] text-muted-foreground">
+							Used for login and sync.
+						</FieldDescription>
 					)}
 				</Field>
 
 				<Field data-invalid={!!errors.password} className="gap-1">
-					<FieldLabel htmlFor="password" className="text-xs">Password</FieldLabel>
+					<FieldLabel htmlFor="password" className="text-xs">
+						Password
+					</FieldLabel>
 					<Input
 						id="password"
 						type="password"
@@ -157,9 +171,13 @@ export function SignupForm({
 						className="h-8 text-xs rounded-lg"
 					/>
 					{errors.password ? (
-						<FieldError className="text-[11px]">{errors.password.message}</FieldError>
+						<FieldError className="text-[11px]">
+							{errors.password.message}
+						</FieldError>
 					) : (
-						<FieldDescription className="text-[10px] text-muted-foreground">At least 8 characters.</FieldDescription>
+						<FieldDescription className="text-[10px] text-muted-foreground">
+							At least 8 characters.
+						</FieldDescription>
 					)}
 				</Field>
 
@@ -176,14 +194,22 @@ export function SignupForm({
 						className="h-8 text-xs rounded-lg"
 					/>
 					{errors.password_confirmation ? (
-						<FieldError className="text-[11px]">{errors.password_confirmation.message}</FieldError>
+						<FieldError className="text-[11px]">
+							{errors.password_confirmation.message}
+						</FieldError>
 					) : (
-						<FieldDescription className="text-[10px] text-muted-foreground">Confirm your password.</FieldDescription>
+						<FieldDescription className="text-[10px] text-muted-foreground">
+							Confirm your password.
+						</FieldDescription>
 					)}
 				</Field>
 
 				<Field className="mt-2">
-					<Button type="submit" className="w-full h-8 text-xs rounded-lg font-medium bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200" disabled={isSubmitting}>
+					<Button
+						type="submit"
+						className="w-full h-8 text-xs rounded-lg font-medium bg-zinc-900 dark:bg-zinc-100 text-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200"
+						disabled={isSubmitting}
+					>
 						{isSubmitting ? (
 							<>
 								<svg
@@ -214,7 +240,9 @@ export function SignupForm({
 					</Button>
 				</Field>
 
-				<FieldSeparator className="text-[10px] text-muted-foreground my-1">Or register with</FieldSeparator>
+				<FieldSeparator className="text-[10px] text-muted-foreground my-1">
+					Or register with
+				</FieldSeparator>
 
 				<Field>
 					<Button
@@ -257,10 +285,7 @@ export function SignupForm({
 
 				<div className="text-center text-xs text-muted-foreground mt-1">
 					Already have an account?{" "}
-					<Link
-						to="/"
-						className="font-medium text-foreground hover:underline"
-					>
+					<Link to="/" className="font-medium text-foreground hover:underline">
 						Log in here
 					</Link>
 				</div>

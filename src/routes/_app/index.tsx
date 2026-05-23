@@ -31,7 +31,8 @@ function RouteComponent() {
 					Welcome to StudyVault AI
 				</h1>
 				<p className="text-muted-foreground text-xs leading-relaxed max-w-sm">
-					Your modern personal digital notebook. Jot down your learning materials, organize your thoughts, and receive intelligent summaries.
+					Your modern personal digital notebook. Jot down your learning
+					materials, organize your thoughts, and receive intelligent summaries.
 				</p>
 			</div>
 
