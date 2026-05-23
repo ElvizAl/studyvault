@@ -32,3 +32,8 @@ export type RestoreNoteInput = z.infer<typeof restoreNoteSchema>;
 export type PermanentDeleteNoteInput = z.infer<
 	typeof permanentDeleteNoteSchema
 >;
+
+export const searchNotesSchema = z.object({
+	query: z.string().min(1),
+});
+export type SearchNotesInput = z.infer<typeof searchNotesSchema>;

@@ -88,11 +88,31 @@ function RouteComponent() {
 		[note.id, router],
 	);
 
+	// Derive a title from markdown content (first H1 or first non-empty line)
+	function deriveTitle(markdownContent: string): string {
+		const lines = markdownContent.split("\n");
+		for (const line of lines) {
+			const trimmed = line.trim();
+			if (!trimmed) continue;
+			// Match H1: "# Heading"
+			const h1Match = trimmed.match(/^#\s+(.+)/);
+			if (h1Match) return h1Match[1].trim();
+			// Strip other markdown heading markers and return first text
+			const stripped = trimmed.replace(/^#{1,6}\s+/, "").trim();
+			if (stripped) return stripped;
+		}
+		return "";
+	}
+
 	// Handle input changes with debouncing
 	const handleChange = (newTitle: string, newContent: string) => {
-		setTitle(newTitle);
+		// When the user hasn't typed a manual title, auto-derive from content
+		const effectiveTitle =
+			newTitle.trim() !== "" ? newTitle : deriveTitle(newContent);
+
+		setTitle(newTitle); // keep input field value as-is
 		setContent(newContent);
-		pendingSaveData.current = { title: newTitle, content: newContent };
+		pendingSaveData.current = { title: effectiveTitle, content: newContent };
 
 		if (saveStatus !== "error") {
 			setSaveStatus("saving");
