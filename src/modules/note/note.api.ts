@@ -8,6 +8,7 @@ import {
 	deleteNoteSchema,
 	restoreNoteSchema,
 	permanentDeleteNoteSchema,
+	searchNotesSchema,
 } from "./note.schema";
 import { z } from "zod";
 
@@ -209,4 +210,47 @@ export const getNoteByIdFn = createServerFn({ method: "GET" })
 		});
 
 		return note;
+	});
+
+// Helper: extract a ~150-char snippet from content around the first query match
+function extractSnippet(content: string, query: string): string {
+	const lower = content.toLowerCase();
+	const idx = lower.indexOf(query.toLowerCase());
+	if (idx === -1) {
+		return content.slice(0, 150).trim();
+	}
+	const start = Math.max(0, idx - 60);
+	const end = Math.min(content.length, idx + 90);
+	let snippet = content.slice(start, end).trim();
+	if (start > 0) snippet = `…${snippet}`;
+	if (end < content.length) snippet = `${snippet}…`;
+	return snippet;
+}
+
+export const searchNotesFn = createServerFn({ method: "GET" })
+	.middleware([dbMiddleware])
+	.inputValidator(searchNotesSchema)
+	.handler(async ({ context, data }) => {
+		const session = await requireSession();
+
+		const notes = await context.db.note.findMany({
+			where: {
+				userId: session.user.id,
+				deletedAt: null,
+				OR: [
+					{ title: { contains: data.query, mode: "insensitive" } },
+					{ content: { contains: data.query, mode: "insensitive" } },
+				],
+			},
+			orderBy: { updatedAt: "desc" },
+			take: 20,
+		});
+
+		return notes.map((note) => ({
+			id: note.id,
+			title: note.title,
+			notebookId: note.notebookId,
+			snippet: extractSnippet(note.content, data.query),
+			updatedAt: note.updatedAt,
+		}));
 	});
