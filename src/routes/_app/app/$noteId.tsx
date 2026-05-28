@@ -17,6 +17,9 @@ import {
 	Loader2,
 	AlertCircle,
 	Sparkles,
+	Layers,
+	CircleHelp,
+	ChevronRight,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 
@@ -48,14 +51,22 @@ function RouteComponent() {
 	const pendingSaveData = useRef<{ title: string; content: string } | null>(
 		null,
 	);
+	const displayTitle = title.trim() || "Untitled";
+	const notebook = note.notebook ?? null;
+	const wordCount =
+		content.trim() === "" ? 0 : content.trim().split(/\s+/).length;
+	const charCount = content.length;
+	const readTime = Math.ceil(wordCount / 200);
+	const isAiDisabled = wordCount < 150;
 
 	// Sync local state with loaded note if noteId changes
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Reset state when switching between notes that have identical title and content.
 	useEffect(() => {
 		setTitle(note.title);
 		setContent(note.content);
 		setSaveStatus("idle");
 		pendingSaveData.current = null;
-	}, [note.content, note.title]); // trigger when note ID changes
+	}, [note.content, note.id, note.title]); // trigger when note ID changes
 
 	// Auto-save function
 	const performSave = useCallback(
@@ -194,16 +205,39 @@ function RouteComponent() {
 		}
 	};
 
+	const handleNotebookBreadcrumbClick = () => {
+		if (!notebook?.id) return;
+
+		window.dispatchEvent(
+			new CustomEvent("studyvault:highlight-notebook", {
+				detail: { notebookId: notebook.id },
+			}),
+		);
+	};
+
 	return (
 		<div className="flex-1 flex h-full overflow-hidden bg-background">
 			{/* Main Editor Panel */}
 			<div className="flex-1 flex flex-col h-full border-r border-border">
 				{/* Top Bar */}
 				<header className="h-14 border-b border-border px-6 flex items-center justify-between bg-card">
-					<div className="flex items-center gap-2 text-muted-foreground text-xs font-medium min-w-0">
+					<div className="flex items-center gap-1.5 text-muted-foreground text-xs font-medium min-w-0">
 						<FileText className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
-						<span className="truncate max-w-45 font-semibold text-foreground">
-							{title || "Untitled"}
+						{notebook ? (
+							<>
+								<button
+									type="button"
+									onClick={handleNotebookBreadcrumbClick}
+									className="truncate max-w-44 text-left font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+									title="Highlight notebook in sidebar"
+								>
+									{notebook.name}
+								</button>
+								<ChevronRight className="w-3.5 h-3.5 shrink-0 text-muted-foreground/60" />
+							</>
+						) : null}
+						<span className="truncate max-w-56 font-semibold text-foreground">
+							{displayTitle}
 						</span>
 					</div>
 
@@ -235,7 +269,43 @@ function RouteComponent() {
 							)}
 						</div>
 
-						{/* Trash Action */}
+						{/* Editor Actions */}
+						<span
+							title={
+								isAiDisabled
+									? "Minimal 150 kata untuk menggunakan fitur AI"
+									: "Generate Flashcard"
+							}
+							className={isAiDisabled ? "cursor-not-allowed" : undefined}
+						>
+							<Button
+								variant="ghost"
+								size="sm"
+								disabled={isAiDisabled}
+								className="h-8 text-xs text-muted-foreground hover:text-foreground"
+							>
+								<Layers className="w-3.5 h-3.5" />
+								Flashcard
+							</Button>
+						</span>
+						<span
+							title={
+								isAiDisabled
+									? "Minimal 150 kata untuk menggunakan fitur AI"
+									: "Generate Review Question"
+							}
+							className={isAiDisabled ? "cursor-not-allowed" : undefined}
+						>
+							<Button
+								variant="ghost"
+								size="sm"
+								disabled={isAiDisabled}
+								className="h-8 text-xs text-muted-foreground hover:text-foreground"
+							>
+								<CircleHelp className="w-3.5 h-3.5" />
+								Review
+							</Button>
+						</span>
 						<Button
 							variant="ghost"
 							size="icon"
@@ -263,6 +333,13 @@ function RouteComponent() {
 						placeholder="Start writing..."
 					/>
 				</div>
+
+				<footer className="h-9 border-t border-border bg-card/70 px-6 flex items-center justify-end text-[11px] text-muted-foreground">
+					<span>
+						0 backlinks · {wordCount} words · {charCount} chars · {readTime} min
+						read
+					</span>
+				</footer>
 			</div>
 
 			{/* AI Summarization Panel - Notion/Linear Inspector style */}

@@ -35,8 +35,11 @@ interface SidebarFileTreeProps {
 	notes: Note[];
 	sortBy: SortOption;
 	expandedNotebooks: Set<string>;
+	highlightedNotebookId?: string | null;
 	onToggleNotebook: (notebookId: string) => void;
 	onCreateNote: (notebookId?: string | null) => void;
+	onDeleteNotebook?: (notebookId: string) => void;
+	onRenameNotebook?: (notebookId: string, newName: string) => void;
 }
 
 export function SidebarFileTree({
@@ -44,7 +47,10 @@ export function SidebarFileTree({
 	notes,
 	sortBy,
 	expandedNotebooks,
+	highlightedNotebookId,
 	onToggleNotebook,
+	onDeleteNotebook,
+	onRenameNotebook,
 	onCreateNote,
 }: SidebarFileTreeProps) {
 	// Sort function for notes
@@ -142,7 +148,14 @@ export function SidebarFileTree({
 				<nav className="space-y-1">
 					{sortedNotebooks.map((notebook) => (
 						<div key={notebook.id}>
-							<div className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors group">
+							<div
+								id={`sidebar-notebook-${notebook.id}`}
+								className={`flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors group ${
+									highlightedNotebookId === notebook.id
+										? "bg-primary/10 ring-1 ring-primary/35"
+										: ""
+								}`}
+							>
 								<button
 									type="button"
 									onClick={() => onToggleNotebook(notebook.id)}
@@ -185,7 +198,7 @@ export function SidebarFileTree({
 										<DropdownMenuItem
 											onClick={() => {
 												// TODO: Implement rename notebook
-												console.log("Rename notebook:", notebook.id);
+												onRenameNotebook?.(notebook.id, notebook.name);
 											}}
 										>
 											Rename
@@ -193,7 +206,7 @@ export function SidebarFileTree({
 										<DropdownMenuItem
 											onClick={() => {
 												// TODO: Implement edit notebook
-												console.log("Edit notebook:", notebook.id);
+												onRenameNotebook?.(notebook.id, notebook.name);
 											}}
 										>
 											Edit
@@ -201,7 +214,7 @@ export function SidebarFileTree({
 										<DropdownMenuItem
 											onClick={() => {
 												// TODO: Implement delete notebook
-												console.log("Delete notebook:", notebook.id);
+												onDeleteNotebook?.(notebook.id);
 											}}
 											className="text-red-600 dark:text-red-400"
 										>
