@@ -160,9 +160,13 @@ export const loginServerFn = createServerFn({ method: "POST" })
 
 export const requireSessionFn = createServerFn({ method: "GET" }).handler(
 	async () => {
-		const session = await auth.api.getSession({
-			headers: getRequestHeaders(),
-		});
-		return session;
+		try {
+			const session = await auth.api.getSession({
+				headers: getRequestHeaders(),
+			});
+			return session;
+		} catch {
+			return null;
+		}
 	},
 );

@@ -7,13 +7,17 @@ import OpenAI from "openai";
 
 // Helper to get session and throw if unauthenticated
 async function requireSession() {
-	const session = await auth.api.getSession({
-		headers: getRequestHeaders(),
-	});
-	if (!session) {
+	try {
+		const session = await auth.api.getSession({
+			headers: getRequestHeaders(),
+		});
+		if (!session) {
+			throw new Error("Unauthenticated");
+		}
+		return session;
+	} catch {
 		throw new Error("Unauthenticated");
 	}
-	return session;
 }
 
 // Lightweight djb2-style hash for content comparison

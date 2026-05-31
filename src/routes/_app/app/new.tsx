@@ -2,10 +2,10 @@ import {
 	createFileRoute,
 	useNavigate,
 	useRouter,
+	useMatch,
 } from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
 import { createNoteFn } from "@/modules/note/note.api";
-import { getNotebooksFn } from "@/modules/notebook/notebook.api";
 import { FileText, Loader2, Folder } from "lucide-react";
 import {
 	Select,
@@ -19,17 +19,13 @@ export const Route = createFileRoute("/_app/app/new")({
 	validateSearch: (search: Record<string, unknown>) => ({
 		notebookId: search.notebookId ? (search.notebookId as string) : undefined,
 	}),
-	loader: async () => {
-		const notebooks = await getNotebooksFn();
-		return { notebooks };
-	},
 	component: RouteComponent,
 });
 
 function RouteComponent() {
 	const navigate = useNavigate();
 	const router = useRouter();
-	const { notebooks } = Route.useLoaderData();
+	const { notebooks } = useMatch({ from: "/_app/app" }).loaderData;
 	const search = Route.useSearch();
 	const [title, setTitle] = useState("");
 	const [content, setContent] = useState("");
