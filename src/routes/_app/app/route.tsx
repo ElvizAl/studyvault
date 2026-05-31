@@ -22,6 +22,31 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+
+function AppSkeleton() {
+	return (
+		<div className="flex h-screen w-screen overflow-hidden bg-background">
+			{/* Sidebar skeleton */}
+			<div className="w-60 border-r border-border p-3 space-y-3 shrink-0">
+				<Skeleton className="h-8 w-full" />
+				<Skeleton className="h-4 w-3/4" />
+				<div className="space-y-2 pt-4">
+					{Array.from({ length: 6 }).map((_, i) => (
+						<Skeleton key={i} className="h-7 w-full" />
+					))}
+				</div>
+			</div>
+			{/* Content skeleton */}
+			<div className="flex-1 p-8 space-y-4">
+				<Skeleton className="h-6 w-1/3" />
+				<Skeleton className="h-4 w-full" />
+				<Skeleton className="h-4 w-5/6" />
+				<Skeleton className="h-4 w-2/3" />
+			</div>
+		</div>
+	);
+}
 
 export const Route = createFileRoute("/_app/app")({
 	beforeLoad: async () => {
@@ -39,6 +64,7 @@ export const Route = createFileRoute("/_app/app")({
 		]);
 		return { notes, notebooks };
 	},
+	pendingComponent: AppSkeleton,
 	component: RouteComponent,
 });
 

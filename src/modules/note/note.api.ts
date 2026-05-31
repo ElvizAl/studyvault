@@ -172,6 +172,14 @@ export const getNotesFn = createServerFn({ method: "GET" })
 				userId: session.user.id,
 				deletedAt: null,
 			},
+			select: {
+				id: true,
+				title: true,
+				notebookId: true,
+				wordCount: true,
+				createdAt: true,
+				updatedAt: true,
+			},
 			orderBy: {
 				updatedAt: "desc",
 			},
