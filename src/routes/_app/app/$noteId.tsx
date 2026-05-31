@@ -16,11 +16,25 @@ import {
 	CheckCircle2,
 	Loader2,
 	AlertCircle,
-	Sparkles,
 } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-
 import { Editor } from "@/modules/note/components/editor";
+import { AISummarySidebar } from "@/modules/ai/components/ai-summary-sidebar";
+import { getSummaryFn, generateSummaryFn } from "@/modules/ai/ai.api";
+
+// Lightweight djb2 content hash (must match server-side)
+function hashContent(content: string): string {
+	let hash = 5381;
+	for (let i = 0; i < content.length; i++) {
+		hash = ((hash << 5) + hash) ^ content.charCodeAt(i);
+		hash = hash >>> 0;
+	}
+	return hash.toString(16);
+}
+
+function getWordCount(text: string): number {
+	return text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+}
 
 export const Route = createFileRoute("/_app/app/$noteId")({
 	loader: async ({ params }) => {
@@ -49,13 +63,83 @@ function RouteComponent() {
 		null,
 	);
 
+	// Track typing state for sidebar flicker prevention
+	const [isTyping, setIsTyping] = useState(false);
+	const typingTimeout = useRef<NodeJS.Timeout | null>(null);
+
+	// Track live word count
+	const [wordCount, setWordCount] = useState(getWordCount(note.content));
+
+	// Track last regen hash to detect staleness
+	const lastRegenHashRef = useRef<string | null>(null);
+	const lastRegenWordCountRef = useRef<number>(getWordCount(note.content));
+
 	// Sync local state with loaded note if noteId changes
 	useEffect(() => {
 		setTitle(note.title);
 		setContent(note.content);
 		setSaveStatus("idle");
+		setWordCount(getWordCount(note.content));
 		pendingSaveData.current = null;
-	}, [note.content, note.title]); // trigger when note ID changes
+		lastRegenHashRef.current = null;
+		lastRegenWordCountRef.current = getWordCount(note.content);
+	}, [note.content, note.title]);
+
+	// Trigger staleness check + regen after a successful save
+	const checkAndRegenIfStale = useCallback(
+		async (savedContent: string) => {
+			const currentWordCount = getWordCount(savedContent);
+			if (currentWordCount < 150) return;
+
+			try {
+				// Fetch current summary to get basedOnHash
+				const existingSummary = await getSummaryFn({
+					data: { noteId: note.id },
+				});
+
+				if (!existingSummary) {
+					// No summary yet — trigger initial generation
+					if (lastRegenHashRef.current === null) {
+						lastRegenHashRef.current = hashContent(savedContent);
+						lastRegenWordCountRef.current = currentWordCount;
+						await generateSummaryFn({
+							data: { noteId: note.id, content: savedContent },
+						});
+					}
+					return;
+				}
+
+				if (
+					existingSummary.status === "GENERATING" ||
+					existingSummary.status === "STALE"
+				) {
+					return; // Already in progress
+				}
+
+				const newHash = hashContent(savedContent);
+				const oldHash = existingSummary.basedOnHash;
+				const oldWordCount = lastRegenWordCountRef.current;
+
+				// Minor change: skip regen
+				if (
+					newHash === oldHash ||
+					Math.abs(currentWordCount - oldWordCount) < 5
+				) {
+					return;
+				}
+
+				// Significant change — regenerate
+				lastRegenHashRef.current = newHash;
+				lastRegenWordCountRef.current = currentWordCount;
+				await generateSummaryFn({
+					data: { noteId: note.id, content: savedContent },
+				});
+			} catch {
+				// Staleness check failure is non-critical — silent
+			}
+		},
+		[note.id],
+	);
 
 	// Auto-save function
 	const performSave = useCallback(
@@ -80,12 +164,15 @@ function RouteComponent() {
 
 				// Invalidate router to update note title in sidebar
 				await router.invalidate();
+
+				// After save, check staleness and potentially regenerate
+				void checkAndRegenIfStale(updatedContent);
 			} catch (error) {
 				console.error("Auto-save failed", error);
 				setSaveStatus("error");
 			}
 		},
-		[note.id, router],
+		[note.id, router, checkAndRegenIfStale],
 	);
 
 	// Derive a title from markdown content (first H1 or first non-empty line)
@@ -112,7 +199,15 @@ function RouteComponent() {
 
 		setTitle(newTitle); // keep input field value as-is
 		setContent(newContent);
+		setWordCount(getWordCount(newContent));
 		pendingSaveData.current = { title: effectiveTitle, content: newContent };
+
+		// Mark as typing to freeze sidebar updates
+		setIsTyping(true);
+		if (typingTimeout.current) clearTimeout(typingTimeout.current);
+		typingTimeout.current = setTimeout(() => {
+			setIsTyping(false);
+		}, 600);
 
 		if (saveStatus !== "error") {
 			setSaveStatus("saving");
@@ -168,6 +263,7 @@ function RouteComponent() {
 			if (saveTimeout.current) clearTimeout(saveTimeout.current);
 			if (savedIndicatorTimeout.current)
 				clearTimeout(savedIndicatorTimeout.current);
+			if (typingTimeout.current) clearTimeout(typingTimeout.current);
 		};
 	}, []);
 
@@ -265,31 +361,19 @@ function RouteComponent() {
 				</div>
 			</div>
 
-			{/* AI Summarization Panel - Notion/Linear Inspector style */}
-			<aside className="w-75 hidden xl:flex flex-col border-l border-border bg-zinc-50/50 dark:bg-zinc-950/20 p-5 overflow-y-auto space-y-5 shrink-0">
-				<div className="flex items-center gap-2 font-semibold text-xs text-foreground tracking-tight">
-					<div className="w-6.5 h-6.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-border flex items-center justify-center shadow-xs">
-						<Sparkles className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" />
-					</div>
-					<span>AI Spark Summary</span>
-				</div>
-
-				<div className="border border-border rounded-xl bg-card p-4 space-y-3.5 shadow-xs">
-					<div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-						<span>Status</span>
-						<span className="px-1.5 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-900 text-foreground border border-border text-[9px]">
-							Fresh
-						</span>
-					</div>
-
-					<p className="text-muted-foreground text-xs leading-relaxed font-sans">
-						Start typing in the editor. As your note grows, StudyVault's AI
-						model will automatically analyze and generate high-yield summaries,
-						flashcards, and conceptual breakdowns to boost your learning
-						retention.
-					</p>
-				</div>
-			</aside>
+			{/* AI Summary Sidebar */}
+			<div className="hidden xl:flex">
+				<AISummarySidebar
+					noteId={note.id}
+					wordCount={wordCount}
+					isTyping={isTyping}
+					contentForRegen={content}
+					onRegenRequested={() => {
+						lastRegenHashRef.current = hashContent(content);
+						lastRegenWordCountRef.current = wordCount;
+					}}
+				/>
+			</div>
 		</div>
 	);
 }
